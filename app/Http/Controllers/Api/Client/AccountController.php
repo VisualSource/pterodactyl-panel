@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Pterodactyl\Facades\Activity;
 use Pterodactyl\Services\Users\UserUpdateService;
 use Pterodactyl\Transformers\Api\Client\AccountTransformer;
@@ -54,6 +55,36 @@ class AccountController extends ClientApiController
             Activity::event('user:account.email-changed')
                 ->property(['old' => $original, 'new' => $request->input('email')])
                 ->log();
+                
+            try {
+                // Curently our system has two DB's
+                // so to keep emails synced between 
+                // the local system DB and the customer DB
+                // we have this webhook
+                
+                $user = $request->user();
+                $data = array(
+                    "email" => $request->input('email'),
+                    "uuid" => $user->uuid
+                ); 
+                 
+                $post_data = json_encode($data);
+        
+                $ctl = curl_init(env("APP_WEBHOOK_API"));
+                curl_setopt($ctl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ctl, CURLINFO_HEADER_OUT, true);
+                curl_setopt($ctl, CURLOPT_POST,       true);
+                curl_setopt($ctl, CURLOPT_POSTFIELDS, $post_data);
+                curl_setopt($ctl, CURLOPT_HTTPHEADER,array(
+                    "Content-Type: application/json",
+                    "Content-Length: " . strlen($post_data),
+                    "Authorization: Bearer " . env("APP_WEBHOOK_TOKEN")
+                ));
+                curl_exec($ctl);
+                curl_close($ctl);
+            } catch (\Throwable $th) {
+                Log::error($th);
+            }
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
