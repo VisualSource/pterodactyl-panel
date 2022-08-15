@@ -9,7 +9,7 @@ env:
 # Once a week on Friday
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 0 * * 5'
 jobs:
   merge:
     runs-on: ubuntu-latest
