@@ -1,0 +1,51 @@
+#https://stackoverflow.com/questions/23793062/can-forks-be-synced-automatically-in-github
+#https://dev.to/n3wt0n/3-ways-to-sync-a-forked-repository-on-github-automatically-cfd
+name: Merge upstream branches
+
+env: 
+  UPSTREAM_URL: "https://github.com/pterodactyl/panel.git"
+  WORKFLOW_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  UPSTREAM_BRANCH: "develop"
+  DOWNSTREAM_BRANCH: "develop"
+# Once a week on Friday
+on:
+  schedule:
+    - cron: '0 0/5 * 1/1 * ? *'
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Sync and merge upstream repository with your current repository
+        uses: dabreadman/sync-upstream-repo@v1.3.0
+        with:
+          upstream_repo: ${{ env.UPSTREAM_URL }}
+          upstream_branch: ${{ env.UPSTREAM_BRANCH }}
+          downstream_branch: ${{ env.DOWNSTREAM_BRANCH }}
+          token: ${{ env.WORKFLOW_TOKEN }}
+      - name: Get latest pterodactyl release
+        uses: rez0n/actions-github-release@v1.8
+        id: pt_release
+        env: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: "pterodactyl/panel"
+          type: "stable"
+      - name: Get latest TitanHosting release
+        uses: rez0n/actions-github-release@v1.8
+        id: th_release
+        env: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: "VisualSource/pterodactyl-panel"
+          type: "stable"
+      - name: Create Release
+        if: !contains(steps.th_release.outputs.release,steps.pt_release.outputs.release)
+        run: | 
+          git tag ${{ format('{{{0}a}}',steps.pt_release.outputs.release) }}
+          git tag -a ${{ format('{{{0}a}}',steps.pt_release.outputs.release) }} -m "Create release"
+          git push origin ${{ format('{{{0}a}}',steps.pt_release.outputs.release) }}
+
+
+
+
+
+
+    
