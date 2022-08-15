@@ -1,7 +1,6 @@
+name: Sync
 #https://stackoverflow.com/questions/23793062/can-forks-be-synced-automatically-in-github
 #https://dev.to/n3wt0n/3-ways-to-sync-a-forked-repository-on-github-automatically-cfd
-name: Merge upstream branches
-
 env: 
   UPSTREAM_URL: "https://github.com/pterodactyl/panel.git"
   WORKFLOW_TOKEN: ${{ secrets.GITHUB_TOKEN }}
