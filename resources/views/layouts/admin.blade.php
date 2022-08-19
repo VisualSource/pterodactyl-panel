@@ -127,6 +127,11 @@
                                 <i class="fa fa-th-large"></i> <span>Nests</span>
                             </a>
                         </li>
+                        <li class="{{ ! starts_with(Route::currentRouteName(), 'admin.domains') ?: 'active' }}">
+                            <a href="{{ route('admin.domains') }}">
+                                <i class="fa fa fa-rss" aria-hidden="true"></i> <span>Domains</span>
+                            </a>
+                        </li>
                     </ul>
                 </section>
             </aside>
@@ -197,11 +202,11 @@
                         }, function () {
                              $.ajax({
                                 type: 'POST',
-                                url: '{{ route('auth.logout') }}',
+                                url: "{{ route('auth.logout') }}",
                                 data: {
                                     _token: '{{ csrf_token() }}'
                                 },complete: function () {
-                                    window.location.href = '{{route('auth.login')}}';
+                                    window.location.href = "{{route('auth.login')}}";
                                 }
                         });
                     });

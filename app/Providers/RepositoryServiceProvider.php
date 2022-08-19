@@ -17,6 +17,7 @@ use Pterodactyl\Repositories\Eloquent\LocationRepository;
 use Pterodactyl\Repositories\Eloquent\ScheduleRepository;
 use Pterodactyl\Repositories\Eloquent\SettingsRepository;
 use Pterodactyl\Repositories\Eloquent\AllocationRepository;
+use Pterodactyl\Repositories\Eloquent\DomainsRepository;
 use Pterodactyl\Contracts\Repository\EggRepositoryInterface;
 use Pterodactyl\Repositories\Eloquent\EggVariableRepository;
 use Pterodactyl\Contracts\Repository\NestRepositoryInterface;
@@ -37,6 +38,7 @@ use Pterodactyl\Contracts\Repository\AllocationRepositoryInterface;
 use Pterodactyl\Contracts\Repository\EggVariableRepositoryInterface;
 use Pterodactyl\Contracts\Repository\DatabaseHostRepositoryInterface;
 use Pterodactyl\Contracts\Repository\ServerVariableRepositoryInterface;
+use Pterodactyl\Contracts\Repository\DomainRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -63,5 +65,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SubuserRepositoryInterface::class, SubuserRepository::class);
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(DomainRepositoryInterface::class, DomainsRepository::class);
     }
 }

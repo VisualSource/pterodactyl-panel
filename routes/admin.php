@@ -226,3 +226,15 @@ Route::group(['prefix' => 'nests'], function () {
     Route::delete('/egg/{egg:id}', [Admin\Nests\EggController::class, 'destroy']);
     Route::delete('/egg/{egg:id}/variables/{variable:id}', [Admin\Nests\EggVariableController::class, 'destroy']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Domain Controller Routes
+|--------------------------------------------------------------------------
+|
+| Endpoint: /admin/domains
+|
+*/
+Route::group(['prefix' => 'domains'], function () {
+    Route::get('/', [Admin\Domains\DomainsController::class, 'index'])->name('admin.domains');
+});
