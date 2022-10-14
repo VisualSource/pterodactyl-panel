@@ -4,6 +4,8 @@ name: Sync
 #https://github.com/nektos/act
 # Once a week on Friday
 on:
+  workflow_dispatch:
+
   schedule:
     - cron: '0 0 * * 5'
 jobs:
