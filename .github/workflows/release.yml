@@ -2,9 +2,11 @@ name: Release
 
 on:
   workflow_call:
+
   push:
     tags:
       - 'v*'
+
 jobs:
   release:
     name: Release

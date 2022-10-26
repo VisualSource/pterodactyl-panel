@@ -2,6 +2,7 @@ name: Sync
 #https://stackoverflow.com/questions/23793062/can-forks-be-synced-automatically-in-github
 #https://dev.to/n3wt0n/3-ways-to-sync-a-forked-repository-on-github-automatically-cfd
 #https://github.com/nektos/act
+#https://docs.github.com/en/actions/using-workflows/reusing-workflows
 # Once a week on Friday
 on:
   workflow_dispatch:
@@ -9,6 +10,7 @@ on:
     - cron: '0 0 * * 5'
 jobs:
   sync:
+    using: "composite"
     runs-on: ubuntu-latest
     steps: 
       - name: Sync and merge with upstream
@@ -48,7 +50,7 @@ jobs:
           tag: ${{format('{0}-a', steps.pt_r.outputs.release )}}
       - name: Create Release
         if: ${{ '>' == steps.version.outputs.comparison-result }}
-        uses: VisualSource/pterodactyl-panel/.github/workflows/release.yml@develop
+        uses: ./.github/workflows/release.yml
 
 
 
