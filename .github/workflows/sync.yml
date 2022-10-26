@@ -10,7 +10,6 @@ on:
     - cron: '0 0 * * 5'
 jobs:
   sync:
-    using: "composite"
     runs-on: ubuntu-latest
     steps: 
       - name: Sync and merge with upstream
