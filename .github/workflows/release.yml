@@ -1,7 +1,8 @@
 name: Release
 
 on:
-  workflow_call:
+  repository_dispatch:
+    types: [create-release]
 
   push:
     tags:

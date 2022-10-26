@@ -50,7 +50,9 @@ jobs:
           tag: ${{format('{0}-a', steps.pt_r.outputs.release )}}
       - name: Create Release
         if: ${{ '>' == steps.version.outputs.comparison-result }}
-        uses: ./.github/workflows/release.yml
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: create-release
 
 
 
