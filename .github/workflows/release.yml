@@ -1,9 +1,7 @@
 name: Release
 
 on:
-  repository_dispatch:
-    types: [create-release]
-
+  workflow_call:
   push:
     tags:
       - 'v*'

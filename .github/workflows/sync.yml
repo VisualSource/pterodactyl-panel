@@ -1,24 +1,26 @@
 name: Sync
-#https://stackoverflow.com/questions/23793062/can-forks-be-synced-automatically-in-github
-#https://dev.to/n3wt0n/3-ways-to-sync-a-forked-repository-on-github-automatically-cfd
-#https://github.com/nektos/act
-#https://docs.github.com/en/actions/using-workflows/reusing-workflows
-# Once a week on Friday
+
 on:
+  push:
   workflow_dispatch:
+
   schedule:
     - cron: '0 0 * * 5'
+
 jobs:
   sync:
     runs-on: ubuntu-latest
+    outputs: 
+      build: ${{ '>' == steps.version.outputs.comparison-result }}
+      id: ${{format('{0}-a', steps.pt_r.outputs.release)}}
     steps: 
-      - name: Sync and merge with upstream
-        uses: dabreadman/sync-upstream-repo@v1.3.0
-        with: 
-          upstream_repo: "https://github.com/pterodactyl/panel.git"
-          upstream_branch: "develop"
-          downstream_branch: "develop"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Sync and merge with upstream
+      #  uses: dabreadman/sync-upstream-repo@v1.3.0
+      #  with: 
+      #    upstream_repo: "https://github.com/pterodactyl/panel.git"
+      #    upstream_branch: "develop"
+      #    downstream_branch: "develop"
+      #    token: ${{ secrets.GITHUB_TOKEN }}
       - name: Fetch Pterodactyl Release
         uses: rez0n/actions-github-release@v1.8
         id: pt_r
@@ -38,22 +40,28 @@ jobs:
         id: version
         with:
           version: ${{steps.pt_r.outputs.release }}
-          compare-to: ${{ steps.th_r.outputs.release}}  
+          compare-to: ${{ steps.th_r.outputs.release}}    
+      - name: Debug
+        if: ${{ env.ACT }}
+        run: |
+          echo Pterodactyl Panel Version: ${{ steps.pt_r.outputs.release }} 
+          echo Titanhosting Panel Version: ${{ steps.th_r.outputs.release }}
       - name: Code Checkout
         if: ${{ '>' == steps.version.outputs.comparison-result }}
-        uses: actions/checkout@v3     
-      - name: Create Tag
+        uses: actions/checkout@v3
+      - name: Tag and push 
         if: ${{ '>' == steps.version.outputs.comparison-result }}
-        uses: rickstaa/action-create-tag@v1.3.7
-        with:
-          tag: ${{format('{0}-a', steps.pt_r.outputs.release )}}
-      - name: Create Release
-        if: ${{ '>' == steps.version.outputs.comparison-result }}
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          event-type: create-release
+        env:
+          TAG: ${{format('{0}-a', steps.pt_r.outputs.release)}}
+        run: | 
+            git config --local user.email "support@titanhosting.us"
+            git config --local user.name "Titanhosting CI"
+            echo Create Tag $TAG
+            git tag $TAG
+            echo push origin $TAG
+            git push origin $TAG
 
-
+    
 
 
 
