@@ -1,5 +1,7 @@
 name: Sync
-
+#https://joht.github.io/johtizen/build/2022/01/20/github-actions-push-into-repository.html
+#https://stackoverflow.com/questions/60963759/use-github-actions-to-create-a-tag-but-not-a-release
+#https://octokit.github.io/rest.js/v19#actions
 on:
   push:
   workflow_dispatch:
@@ -9,6 +11,7 @@ on:
 
 jobs:
   sync:
+    name: Sync
     runs-on: ubuntu-latest
     outputs: 
       build: ${{ '>' == steps.version.outputs.comparison-result }}
@@ -60,6 +63,21 @@ jobs:
             git tag $TAG
             echo push origin $TAG
             git push origin $TAG
+      - name: Init Release
+        if: ${{ '>' == steps.version.outputs.comparison-result }}
+        uses: actions/github-script@v6.3.3
+        env:
+          TAG: ${{format('{0}-a', steps.pt_r.outputs.release)}}
+        with:
+          script: |
+            const { TAG } = process.env;
+            github.rest.actions.createWorkflowDispatch({
+              owner: "VisualSource",
+              repo: "pterodactyl-panel",
+              workflow_id: "release.yml",
+              ref: TAG
+            });
+
 
     
 
