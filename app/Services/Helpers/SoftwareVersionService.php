@@ -13,6 +13,8 @@ class SoftwareVersionService
 {
     public const VERSION_CACHE_KEY = 'pterodactyl:versioning_data';
 
+    public const TITANHOSTING_CACHE_KEY = 'titanhosting:versioning_data';
+
     private static array $result;
 
     /**
@@ -66,7 +68,14 @@ class SoftwareVersionService
             return true;
         }
 
-        return version_compare(config('app.version'), $this->getPanel()) >= 0;
+        $next_version = $this->getPanel();
+        $current_version = config('app.version');
+
+        if(preg_match('/(-[a-z])$/',$next_version)){
+            return version_compare($current_version,$next_version,'>=');
+        }
+
+        return version_compare($current_version, $next_version) >= 0;
     }
 
     /**
@@ -80,7 +89,7 @@ class SoftwareVersionService
 
         return version_compare($version, $this->getDaemon()) >= 0;
     }
-
+    
     /**
      * Keeps the versioning cache up-to-date with the latest results from the CDN.
      */

@@ -2,10 +2,13 @@ name: Sync
 #https://joht.github.io/johtizen/build/2022/01/20/github-actions-push-into-repository.html
 #https://stackoverflow.com/questions/60963759/use-github-actions-to-create-a-tag-but-not-a-release
 #https://octokit.github.io/rest.js/v19#actions
+#https://stackoverflow.com/questions/23793062/can-forks-be-synced-automatically-in-github
+#https://dev.to/n3wt0n/3-ways-to-sync-a-forked-repository-on-github-automatically-cfd
+#https://github.com/nektos/act
+#https://docs.github.com/en/actions/using-workflows/reusing-workflows
 on:
-  push:
   workflow_dispatch:
-
+  # Once a week on Friday
   schedule:
     - cron: '0 0 * * 5'
 
@@ -17,13 +20,13 @@ jobs:
       build: ${{ '>' == steps.version.outputs.comparison-result }}
       id: ${{format('{0}-a', steps.pt_r.outputs.release)}}
     steps: 
-      #- name: Sync and merge with upstream
-      #  uses: dabreadman/sync-upstream-repo@v1.3.0
-      #  with: 
-      #    upstream_repo: "https://github.com/pterodactyl/panel.git"
-      #    upstream_branch: "develop"
-      #    downstream_branch: "develop"
-      #    token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync and merge with upstream
+        uses: dabreadman/sync-upstream-repo@v1.3.0
+        with: 
+          upstream_repo: "https://github.com/pterodactyl/panel.git"
+          upstream_branch: "develop"
+          downstream_branch: "develop"
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Fetch Pterodactyl Release
         uses: rez0n/actions-github-release@v1.8
         id: pt_r

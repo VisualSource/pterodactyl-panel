@@ -11,7 +11,7 @@ class ClosePort extends Command
      *
      * @var string
      */
-    protected $signature = 'port:close {port}';
+    protected $signature = 'port:close {port : Port to close}';
 
     /**
      * The console command description.
