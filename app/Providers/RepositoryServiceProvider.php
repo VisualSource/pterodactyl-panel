@@ -43,7 +43,7 @@ use Pterodactyl\Contracts\Repository\DomainRepositoryInterface;
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
-     * Register all of the repository bindings.
+     * Register all the repository bindings.
      */
     public function register()
     {

@@ -2,9 +2,9 @@
 
 namespace Pterodactyl\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Container\Container;
@@ -155,6 +155,7 @@ abstract class Model extends IlluminateModel
             return;
         }
 
+        /** @var \Illuminate\Validation\Validator $validator */
         $validator = $this->getValidator();
         $validator->setData(
             // Trying to do self::toArray() here will leave out keys based on the whitelist/blacklist
