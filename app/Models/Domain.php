@@ -37,7 +37,7 @@ class Domain extends Model {
         "server_id" => 'integer'
     ];
 
-    public static $validationRules = [
+    public static array $validationRules = [
         'server_id' => 'nullable|exists:servers,id',
         'domain' => 'required|string'
     ];
@@ -48,7 +48,7 @@ class Domain extends Model {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function server(): BelongsTo {
-        return $this->belongsTo(Server::class,"id","server_id");
+        return $this->belongsTo(Server::class);
     }
    
 }

@@ -22,7 +22,7 @@ class DomainRepository extends EloquentRepository implements DomainRepositoryInt
      */
     public function getWithCounts(?int $id = null): Collection|Domain
     {
-        $instance = $this->getBuilder()->withCount(["servers"]);
+        $instance = $this->getBuilder()->withCount(["server"]);
         if(!is_null($id)) {
             $instance = $instance->find($id,$this->getColumns());
             if(!$instance) {

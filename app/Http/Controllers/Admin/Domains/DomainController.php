@@ -9,21 +9,17 @@
 namespace Pterodactyl\Http\Controllers\Admin\Domains;
 
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Contracts\Repository\DomainRepositoryInterface;
+use Pterodactyl\Models\Domain;
 
-
-class DomainsController extends Controller {
-     /**
-     * @var \Pterodactyl\Contracts\Repository\DomainRepositoryInterface
-     */
-    protected $repository;
-
+class DomainController extends Controller {
     /**
      * DomainsController constructor.
      */
     public function __construct(
-        DomainRepositoryInterface $repository
+        protected DomainRepositoryInterface $repository,
     ){
         $this->repository = $repository;
     }
@@ -37,6 +33,29 @@ class DomainsController extends Controller {
         return view('admin.domains.index', [
             'domains' => $this->repository->getWithCounts(),
         ]);
+    }
+
+    public function view(Domain $domain): View {
+        return view("admin.domains.view",[ "domain" => $domain ]);
+    }
+
+    public function create(): View {
+        return view("admin.domains.new");
+    }
+
+    public function store($request): RedirectResponse {
+
+        return redirect()->route("admin.domains");
+    }
+
+    public function update($request, Domain $domain): RedirectResponse {
+
+        return redirect()->route("admin.domains");
+    }
+
+    public function destory(Domain $domain): RedirectResponse {
+
+        return redirect()->route("admin.domains");
     }
 }
 
