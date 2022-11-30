@@ -2,12 +2,14 @@
 
 namespace Pterodactyl\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * Pterodactyl\Models\Domain. 
  *  
  * @property int $id
  * @property string $domain
- * @property int $server_id
+ * @property int|null $server_id
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Pterodactyl\Models\Server|null $server
@@ -25,7 +27,7 @@ namespace Pterodactyl\Models;
  **/
 class Domain extends Model {
 
-    public const RESOURCE_NAME = "domains";
+    public const RESOURCE_NAME = "domain";
 
     protected $table = "domains";
 
@@ -45,8 +47,8 @@ class Domain extends Model {
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function servers(){
-        return $this->belongsTo(Server::class);
+    public function server(): BelongsTo {
+        return $this->belongsTo(Server::class,"id","server_id");
     }
    
 }
