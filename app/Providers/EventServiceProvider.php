@@ -15,6 +15,9 @@ use Pterodactyl\Events\Server\Installed as ServerInstalledEvent;
 use Pterodactyl\Notifications\ServerInstalled as ServerInstalledNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+use Pterodactyl\Events\User\EmailChange;
+use Pterodactyl\Listeners\EmailChangeWebhook;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -22,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         ServerInstalledEvent::class => [ServerInstalledNotification::class],
+        EmailChange::class => [
+            EmailChangeWebhook::class
+        ]
     ];
 
     protected $subscribe = [
