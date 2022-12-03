@@ -9,16 +9,18 @@
 
 namespace Pterodactyl\Contracts\Repository;
 
+use Pterodactyl\Models\Domain;
+use Illuminate\Database\Eloquent\Collection;
+
 interface DomainRepositoryInterface extends RepositoryInterface {
     /**
-     * Return a nest or all nests and the count of eggs and servers for that nest.
-     *
-     * @return \Pterodactyl\Models\Domain|\Illuminate\Database\Eloquent\Collection
+     * Return a domain or all domains and the count of the server for that domain.
      *
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
-    public function getWithCounts(int $id = null);
+    public function getWithCounts(int $id = null): Collection|Domain;
+
+
+    public function getWithServers(int $id = null): Collection|Domain;
 }
-
-
 ?>

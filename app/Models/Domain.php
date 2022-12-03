@@ -2,12 +2,14 @@
 
 namespace Pterodactyl\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * Pterodactyl\Models\Domain. 
  *  
  * @property int $id
  * @property string $domain
- * @property int $server_id
+ * @property int|null $server_id
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Pterodactyl\Models\Server|null $server
@@ -25,7 +27,7 @@ namespace Pterodactyl\Models;
  **/
 class Domain extends Model {
 
-    public const RESOURCE_NAME = "domains";
+    public const RESOURCE_NAME = "domain";
 
     protected $table = "domains";
 
@@ -35,17 +37,22 @@ class Domain extends Model {
         "server_id" => 'integer'
     ];
 
-    public static $validationRules = [
+    public static array $validationRules = [
         'server_id' => 'nullable|exists:servers,id',
-        'domain' => 'required|string'
+        'domain' => 'required|string|unique:domains,domain|between:3,60'
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return $this->getKeyName();
+    }
 
     /**
      * Gets information for the server associated with this domain.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function servers(){
+    public function server(): BelongsTo {
         return $this->belongsTo(Server::class);
     }
    

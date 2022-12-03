@@ -236,5 +236,9 @@ Route::group(['prefix' => 'nests'], function () {
 |
 */
 Route::group(['prefix' => 'domains'], function () {
-    Route::get('/', [Admin\Domains\DomainsController::class, 'index'])->name('admin.domains');
+    Route::get('/', [Admin\Domains\DomainController::class, 'index'])->name('admin.domains');
+
+    Route::post('/new', [Admin\Domains\DomainController::class, 'store'])->name('admin.domains.new');
+    Route::patch('/{domain:id}',[Admin\Domains\DomainController::class,'update'])->name('admin.domains.patch');
+    Route::delete('/{domain:id}', [Admin\Domains\DomainController::class, 'destroy']);
 });
