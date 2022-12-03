@@ -39,8 +39,13 @@ class Domain extends Model {
 
     public static array $validationRules = [
         'server_id' => 'nullable|exists:servers,id',
-        'domain' => 'required|string'
+        'domain' => 'required|string|unique:domains,domain|between:3,60'
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return $this->getKeyName();
+    }
 
     /**
      * Gets information for the server associated with this domain.

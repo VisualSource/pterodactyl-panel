@@ -33,4 +33,18 @@ class DomainRepository extends EloquentRepository implements DomainRepositoryInt
 
         return $instance->get($this->getColumns());
     }
+
+    public function getWithServers(?int $id = null): Collection|Domain
+    {
+        $instance = $this->getBuilder()->with(["server"]);
+        if(!is_null($id)) {
+            $instance = $instance->find($id,$this->getColumns());
+            if(!$instance) {
+                throw new RecordNotFoundException();
+            }
+            return $instance;
+        }   
+
+        return $instance->get($this->getColumns());
+    }
 }

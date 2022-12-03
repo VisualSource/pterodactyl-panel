@@ -19,5 +19,8 @@ interface DomainRepositoryInterface extends RepositoryInterface {
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
     public function getWithCounts(int $id = null): Collection|Domain;
+
+
+    public function getWithServers(int $id = null): Collection|Domain;
 }
 ?>
