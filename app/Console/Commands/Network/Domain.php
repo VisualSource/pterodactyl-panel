@@ -4,7 +4,6 @@ namespace Pterodactyl\Console\Commands\Network;
 
 use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Console\Command;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Factory as ValidatorFactory;
 
 class Domain extends Command implements Isolatable

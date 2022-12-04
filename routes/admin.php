@@ -242,3 +242,21 @@ Route::group(['prefix' => 'domains'], function () {
     Route::patch('/{domain:id}',[Admin\Domains\DomainController::class,'update'])->name('admin.domains.patch');
     Route::delete('/{domain:id}', [Admin\Domains\DomainController::class, 'destroy']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Domain Controller Routes
+|--------------------------------------------------------------------------
+|
+| Endpoint: /admin/domains
+|
+*/
+Route::group(['prefix' => 'ports'], function () {
+    Route::get('/', [Admin\PortController::class, 'index'])->name('admin.ports');
+    Route::get('/new', [Admin\PortController::class, 'create'])->name('admin.ports.new');
+    Route::get('/view/{port:id}', [Admin\PortController::class, 'view'])->name('admin.ports.view');
+
+    Route::post('/new', [Admin\PortController::class, 'store'])->name('admin.ports.create');
+    Route::patch('/{port:id}',[Admin\PortController::class,'update']);
+    Route::delete('/{port:id}', [Admin\PortController::class, 'destroy']);
+});
