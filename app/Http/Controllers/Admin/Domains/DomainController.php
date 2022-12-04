@@ -47,15 +47,11 @@ class DomainController extends Controller {
         ]);
     }
 
-    public function view(Domain $domain): View {
-        return view("admin.domains.view",[ "domain" => $domain ]);
-    }
-
     public function store(DomainFormRequest $request): RedirectResponse 
     {
         try {
             $this->creationService->handle($request->normalize());
-            $this->alert->success('Domain was registered. The sub-domain with be ready within 2-5 minutes.')->flash();
+            $this->alert->success('Domain was registered. The sub-domain will be ready within 2-5 minutes.')->flash();
         } catch(DataValidationException $ex){
             $this->alert->danger($ex->getMessageBag()->get("domain"))->flash();
         }
@@ -79,9 +75,10 @@ class DomainController extends Controller {
     {
         try {
             $this->deletionService->handle($domain->id);
-            $this->alert->success('Domain was unregistered. The sub-domain with be removed within 2-5 minutes.')->flash();
+            $this->alert->success('Domain was unregistered. The sub-domain will be removed within 2-5 minutes.')->flash();
         } catch (DisplayException $ex) {
             $this->alert->danger($ex->getMessage())->flash();
+            return response('',404);
         }
 
         return response('', 204);

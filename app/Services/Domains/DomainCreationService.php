@@ -30,7 +30,6 @@ class DomainCreationService
             "--unregister" => true
         ]);
 
-
         return $domain;
     }
 }
