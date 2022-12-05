@@ -18,7 +18,7 @@ Route::group(['prefix' => '/users'], function () {
   
     Route::get('/external/{external_id}', [Application\Users\ExternalUserController::class, 'index'])->name('api.application.users.external');
     
-    Route::post("/titanhosting/login",[Application\Users\ExternalLoginController::class,"index"]);
+    Route::post("/external/login",[Application\Users\ExternalLoginController::class,"index"]);
     
     Route::post('/', [Application\Users\UserController::class, 'store']);
     Route::patch('/{user:id}', [Application\Users\UserController::class, 'update']);
