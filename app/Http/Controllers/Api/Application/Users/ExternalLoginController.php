@@ -64,7 +64,7 @@ class ExternalLoginController extends Controller
             return $this->sendFailedLoginResponse($request, $user);
         }
 
-        Activity::event('auth:checkpoint')->withRequestMetadata()->subject($user)->log();
+        Activity::event('auth:main-site')->withRequestMetadata()->subject($user)->log();
 
         $data = $user->toVueObject();
 

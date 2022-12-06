@@ -10,6 +10,7 @@ return [
     'auth' => [
         'fail' => 'Failed log in',
         'success' => 'Logged in',
+        'main-site' => 'Logged in from https://titanhosting.us',
         'password-reset' => 'Password reset',
         'reset-password' => 'Requested password reset',
         'checkpoint' => 'Two-factor authentication requested',
