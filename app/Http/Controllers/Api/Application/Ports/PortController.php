@@ -6,28 +6,26 @@
  * This software is licensed under the terms of the MIT license.
  * https://opensource.org/licenses/MIT
  */
-namespace Pterodactyl\Http\Controllers\Admin;
+namespace Pterodactyl\Http\Controllers\Api\Application\Ports;
 
-use Illuminate\Support\Facades\Log;
+use Pterodactyl\Http\Controllers\Api\Application\ApplicationApiController;
+
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Prologue\Alerts\AlertsMessageBag;
 use Pterodactyl\Contracts\Repository\NodeRepositoryInterface;
 use Pterodactyl\Contracts\Repository\PortRepositoryInterface;
-use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Exceptions\DisplayException;
-use Pterodactyl\Exceptions\Model\DataValidationException;
+
 use Pterodactyl\Services\Ports\PortCreationService;
 use Pterodactyl\Services\Ports\PortDeletionService;
 use Pterodactyl\Services\Ports\PortUpdateService;
 use Pterodactyl\Models\Port;
-use Pterodactyl\Http\Requests\Admin\PortFormRequest;
+use Pterodactyl\Http\Requests\Api\Application\Ports\PortFormRequest;
 
-class PortController extends Controller 
+class PortController extends ApplicationApiController 
 {
     public function __construct(
-        protected AlertsMessageBag $alert,
         protected NodeRepositoryInterface $nodeRepository,
         protected PortRepositoryInterface $repository,
         protected PortCreationService $creationService,
