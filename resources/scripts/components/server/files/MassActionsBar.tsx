@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import compressFiles from '@/api/server/files/compressFiles';
 import deleteFiles from '@/api/server/files/deleteFiles';
-import { Button } from '@/components/elements/button/index';
+import { Button } from '@/components/elements/button';
 import { Dialog } from '@/components/elements/dialog';
 import Portal from '@/components/elements/Portal';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -75,7 +75,7 @@ const MassActionsBar = () => {
                 >
                     <p className="mb-2">
                         Are you sure you want to delete&nbsp;
-                        <span className="font-semibold text-gray-50">{selectedFiles.length} files</span>? This is a
+                        <span className="font-semibold text-slate-50">{selectedFiles.length} files</span>? This is a
                         permanent action and the files cannot be recovered.
                     </p>
                     {selectedFiles.slice(0, 15).map(file => (

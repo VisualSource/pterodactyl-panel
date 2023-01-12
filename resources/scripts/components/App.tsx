@@ -11,10 +11,12 @@ import Spinner from '@/components/elements/Spinner';
 import { store } from '@/state';
 import { ServerContext } from '@/state/server';
 import { SiteSettings } from '@/state/settings';
+import { AdminContext } from '@/state/admin';
 
+const AdminRouter = lazy(() => import('@/routers/AdminRouter'));
+const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
-const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
 
 interface ExtendedWindow extends Window {
     SiteConfiguration?: SiteSettings;
@@ -26,6 +28,8 @@ interface ExtendedWindow extends Window {
         root_admin: boolean;
         use_totp: boolean;
         language: string;
+        avatar_url: string;
+        admin_role_name: string;
         updated_at: string;
         created_at: string;
         /* eslint-enable camelcase */
@@ -43,6 +47,8 @@ function App() {
             email: PterodactylUser.email,
             language: PterodactylUser.language,
             rootAdmin: PterodactylUser.root_admin,
+            avatarURL: PterodactylUser.avatar_url,
+            roleName: PterodactylUser.admin_role_name,
             useTotp: PterodactylUser.use_totp,
             createdAt: new Date(PterodactylUser.created_at),
             updatedAt: new Date(PterodactylUser.updated_at),
@@ -83,6 +89,17 @@ function App() {
                                             </ServerContext.Provider>
                                         </Spinner.Suspense>
                                     </AuthenticatedRoute>
+                                }
+                            />
+
+                            <Route
+                                path="/admin/*"
+                                element={
+                                    <Spinner.Suspense>
+                                        <AdminContext.Provider>
+                                            <AdminRouter />
+                                        </AdminContext.Provider>
+                                    </Spinner.Suspense>
                                 }
                             />
 

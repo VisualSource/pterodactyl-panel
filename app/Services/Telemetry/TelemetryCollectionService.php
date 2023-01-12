@@ -16,6 +16,7 @@ use Pterodactyl\Models\Location;
 use Illuminate\Support\Facades\DB;
 use Pterodactyl\Models\Allocation;
 use Illuminate\Support\Facades\Http;
+use Pterodactyl\Services\Helpers\SoftwareVersionService;
 use Pterodactyl\Repositories\Eloquent\SettingsRepository;
 use Pterodactyl\Repositories\Wings\DaemonConfigurationRepository;
 
@@ -26,7 +27,8 @@ class TelemetryCollectionService
      */
     public function __construct(
         private DaemonConfigurationRepository $daemonConfigurationRepository,
-        private SettingsRepository $settingsRepository
+        private SettingsRepository $settingsRepository,
+        private SoftwareVersionService $softwareVersionService
     ) {
     }
 
@@ -108,7 +110,7 @@ class TelemetryCollectionService
             'id' => $uuid,
 
             'panel' => [
-                'version' => config('app.version'),
+                'version' => $this->softwareVersionService->getCurrentVersion(),
                 'phpVersion' => phpversion(),
 
                 'drivers' => [
@@ -140,10 +142,12 @@ class TelemetryCollectionService
 
                 'eggs' => [
                     'count' => Egg::count(),
-                    'server_usage' => Egg::all()
-                        ->flatMap(fn (Egg $egg) => [$egg->uuid => $egg->servers->count()])
-                        ->filter(fn (int $count) => $count > 0)
-                        ->toArray(),
+                    // Egg UUIDs are generated randomly on import, so there is not a consistent way to
+                    // determine if servers are using default eggs or not.
+//                    'server_usage' => Egg::all()
+//                        ->flatMap(fn (Egg $egg) => [$egg->uuid => $egg->servers->count()])
+//                        ->filter(fn (int $count) => $count > 0)
+//                        ->toArray(),
                 ],
 
                 'locations' => [
@@ -156,10 +160,12 @@ class TelemetryCollectionService
 
                 'nests' => [
                     'count' => Nest::count(),
-                    'server_usage' => Nest::all()
-                        ->flatMap(fn (Nest $nest) => [$nest->uuid => $nest->eggs->sum(fn (Egg $egg) => $egg->servers->count())])
-                        ->filter(fn (int $count) => $count > 0)
-                        ->toArray(),
+                    // Nest UUIDs are generated randomly on import, so there is not a consistent way to
+                    // determine if servers are using default eggs or not.
+//                    'server_usage' => Nest::all()
+//                        ->flatMap(fn (Nest $nest) => [$nest->uuid => $nest->eggs->sum(fn (Egg $egg) => $egg->servers->count())])
+//                        ->filter(fn (int $count) => $count > 0)
+//                        ->toArray(),
                 ],
 
                 'nodes' => [
