@@ -1,4 +1,4 @@
-import http, { FractalResponseData, getPaginationSet, PaginatedResult } from '@/api/http';
+import http, { type FractalResponseData, getPaginationSet, type PaginatedResult } from '@/api/http';
 import { useContext } from 'react';
 import useSWR from 'swr';
 import { createContext } from '@/api/admin';
@@ -58,12 +58,14 @@ export default (include: string[] = []) => {
         params.sort = `${sortDirection ? '-' :""}${sort}`;
     }
 
-    return useSWR<PaginatedResult<Domain>>(["domains",page,filters,sort,sortDirection],async ()=>{
+    const includes = include.join(",");
+
+    return useSWR<PaginatedResult<Domain>>(["domains",page,filters,sort,sortDirection,includes],async ()=>{
         const { data } = await http.get("/api/application/domains",{ 
             params: {
-                ...params,
-                include: "server", 
-                page
+                include: includes, 
+                page,
+                ...params
             } });
 
         return {

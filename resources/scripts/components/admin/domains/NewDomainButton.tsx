@@ -30,7 +30,7 @@ const schema = object().shape({
 export default function NewDomainButton(){
     const [visible, setVisible] = useState(false);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { mutate } = getDomains();
+    const { mutate } = getDomains(["server"]);
 
     const submit = ({ domain, server_id }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('domain:create');

@@ -25,9 +25,12 @@ const schema = object().shape({
 });
 
 export default function DomainEditButton({ data }: any) {
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState<boolean>(false);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { mutate } = getDomains();
+    const { mutate } = getDomains(["server"]);
+
+    const open = () => setVisible(true);
+    const close = () => setVisible(false);
 
     const submit = ({ server_id }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes("domain:update");
@@ -45,7 +48,29 @@ export default function DomainEditButton({ data }: any) {
 
     return (
         <>
-            <Formik onSubmit={submit} initialValues={{ server_id: data.server_id }} validationSchema={schema}>
+            <Formik onSubmit={submit} validationSchema={schema} initialValues={{ server_id: null } as Values}>
+                {({ isSubmitting })=>(
+                    <Modal 
+                    visible={visible} 
+                    dismissable={!isSubmitting} 
+                    showSpinnerOverlay={isSubmitting} 
+                    onDismissed={close}>
+
+                        <h2 css={tw`mb-6 text-2xl text-neutral-100`}>Edit Domain</h2>
+                    </Modal>
+                )} 
+            </Formik>
+            <button type="button" onClick={open} css={tw`text-primary-400 hover:text-primary-300`}>
+                {data.domain}
+            </button>
+        </>
+    );
+}
+
+/**
+ * 
+ * 
+ * <Formik onSubmit={submit} initialValues={{ server_id: data.server_id }} validationSchema={schema}>
                 {({ isSubmitting, resetForm })=>(
                     <Modal 
                         visible={visible}
@@ -76,7 +101,7 @@ export default function DomainEditButton({ data }: any) {
                             />
 
                             <div css={tw`mt-6`}>
-                                <ServerSelect selected={data.server}/>
+                                <ServerSelect selected={data.server ?? null}/>
                             </div>
 
                             <div css={tw`flex flex-wrap justify-end mt-6 gap-1`}>
@@ -100,10 +125,4 @@ export default function DomainEditButton({ data }: any) {
                     </Modal>
                 )}
             </Formik>
-
-            <button type="button" onClick={() => setVisible(true)} css={tw`text-primary-400 hover:text-primary-300`}>
-                {data.domain}
-            </button>
-        </>
-    );
-}
+ */
