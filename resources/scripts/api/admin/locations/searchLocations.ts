@@ -10,16 +10,14 @@ export default (filters?: Filters): Promise<Location[]> => {
     const params = {};
     if (filters !== undefined) {
         Object.keys(filters).forEach(key => {
-            // @ts-ignore
+            // @ts-expect-error todo
             params['filter[' + key + ']'] = filters[key];
         });
     }
 
     return new Promise((resolve, reject) => {
         http.get('/api/application/locations', { params })
-            .then(response => resolve(
-                (response.data.data || []).map(rawDataToLocation)
-            ))
+            .then(response => resolve((response.data.data || []).map(rawDataToLocation)))
             .catch(reject);
     });
 };

@@ -11,9 +11,9 @@ export interface Allocation {
 
     relations: {
         server?: Server;
-    }
+    };
 
-    getDisplayText (): string;
+    getDisplayText(): string;
 }
 
 export const rawDataToAllocation = ({ attributes }: FractalResponseData): Allocation => ({
@@ -25,11 +25,14 @@ export const rawDataToAllocation = ({ attributes }: FractalResponseData): Alloca
     assigned: attributes.assigned,
 
     relations: {
-        server: attributes.relationships?.server?.object === 'server' ? rawDataToServer(attributes.relationships.server as FractalResponseData) : undefined,
+        server:
+            attributes.relationships?.server?.object === 'server'
+                ? rawDataToServer(attributes.relationships.server as FractalResponseData)
+                : undefined,
     },
 
     // TODO: If IP is an IPv6, wrap IP in [].
-    getDisplayText (): string {
+    getDisplayText(): string {
         if (attributes.alias !== null) {
             return `${attributes.ip}:${attributes.port} (${attributes.alias})`;
         }
@@ -38,7 +41,7 @@ export const rawDataToAllocation = ({ attributes }: FractalResponseData): Alloca
 });
 
 export interface Filters {
-    ip?: string
+    ip?: string;
     /* eslint-disable camelcase */
     server_id?: string;
     /* eslint-enable camelcase */
@@ -48,7 +51,7 @@ export default (id: string | number, filters: Filters = {}, include: string[] = 
     const params = {};
     if (filters !== null) {
         Object.keys(filters).forEach(key => {
-            // @ts-ignore
+            // @ts-expect-error todo
             params['filter[' + key + ']'] = filters[key];
         });
     }

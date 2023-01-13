@@ -40,7 +40,9 @@ export const rawDataToMount = ({ attributes }: FractalResponseData): Mount => ({
     relations: {
         eggs: ((attributes.relationships?.eggs as FractalResponseList | undefined)?.data || []).map(rawDataToEgg),
         nodes: ((attributes.relationships?.nodes as FractalResponseList | undefined)?.data || []).map(rawDataToNode),
-        servers: ((attributes.relationships?.servers as FractalResponseList | undefined)?.data || []).map(rawDataToServer),
+        servers: ((attributes.relationships?.servers as FractalResponseList | undefined)?.data || []).map(
+            rawDataToServer,
+        ),
     },
 });
 
@@ -59,22 +61,24 @@ export default (include: string[] = []) => {
     const params = {};
     if (filters !== null) {
         Object.keys(filters).forEach(key => {
-            // @ts-ignore
+            // @ts-expect-error todo
             params['filter[' + key + ']'] = filters[key];
         });
     }
 
     if (sort !== null) {
-        // @ts-ignore
+        // @ts-expect-error todo
         params.sort = (sortDirection ? '-' : '') + sort;
     }
 
-    return useSWR<PaginatedResult<Mount>>([ 'mounts', page, filters, sort, sortDirection ], async () => {
-        const { data } = await http.get('/api/application/mounts', { params: { include: include.join(','), page, ...params } });
+    return useSWR<PaginatedResult<Mount>>(['mounts', page, filters, sort, sortDirection], async () => {
+        const { data } = await http.get('/api/application/mounts', {
+            params: { include: include.join(','), page, ...params },
+        });
 
-        return ({
+        return {
             items: (data.data || []).map(rawDataToMount),
             pagination: getPaginationSet(data.meta.pagination),
-        });
+        };
     });
 };

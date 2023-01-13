@@ -4,12 +4,12 @@ import { Node, rawDataToNode } from '@/api/admin/nodes/getNodes';
 export default (id: number, node: Partial<Node>, include: string[] = []): Promise<Node> => {
     const data = {};
 
-    Object.keys(node).forEach((key) => {
+    Object.keys(node).forEach(key => {
         const key2 = key
             .replace('HTTP', 'Http')
             .replace('SFTP', 'Sftp')
             .replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-        // @ts-ignore
+        // @ts-expect-error todo
         data[key2] = node[key];
     });
 

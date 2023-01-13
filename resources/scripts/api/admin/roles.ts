@@ -13,9 +13,14 @@ export const Context = createContext<Filters>();
 
 const createRole = (name: string, description: string | null, include: string[] = []): Promise<UserRole> => {
     return new Promise((resolve, reject) => {
-        http.post('/api/application/roles', {
-            name, description,
-        }, { params: { include: include.join(',') } })
+        http.post(
+            '/api/application/roles',
+            {
+                name,
+                description,
+            },
+            { params: { include: include.join(',') } },
+        )
             .then(({ data }) => resolve(Transformers.toUserRole(data)))
             .catch(reject);
     });
@@ -41,25 +46,33 @@ const searchRoles = (filters?: { name?: string }): Promise<UserRole[]> => {
     const params = {};
     if (filters !== undefined) {
         Object.keys(filters).forEach(key => {
-            // @ts-ignore
+            // @ts-expect-error todo
             params['filter[' + key + ']'] = filters[key];
         });
     }
 
     return new Promise((resolve, reject) => {
         http.get('/api/application/roles', { params })
-            .then(response => resolve(
-                (response.data.data || []).map(Transformers.toUserRole)
-            ))
+            .then(response => resolve((response.data.data || []).map(Transformers.toUserRole)))
             .catch(reject);
     });
 };
 
-const updateRole = (id: number, name: string, description: string | null, include: string[] = []): Promise<UserRole> => {
+const updateRole = (
+    id: number,
+    name: string,
+    description: string | null,
+    include: string[] = [],
+): Promise<UserRole> => {
     return new Promise((resolve, reject) => {
-        http.patch(`/api/application/roles/${id}`, {
-            name, description,
-        }, { params: { include: include.join(',') } })
+        http.patch(
+            `/api/application/roles/${id}`,
+            {
+                name,
+                description,
+            },
+            { params: { include: include.join(',') } },
+        )
             .then(({ data }) => resolve(Transformers.toUserRole(data)))
             .catch(reject);
     });
@@ -72,32 +85,27 @@ const getRoles = (include: string[] = []) => {
     const params = {};
     if (filters !== null) {
         Object.keys(filters).forEach(key => {
-            // @ts-ignore
+            // @ts-expect-error todo
             params['filter[' + key + ']'] = filters[key];
         });
     }
 
     if (sort !== null) {
-        // @ts-ignore
+        // @ts-expect-error todo
         params.sort = (sortDirection ? '-' : '') + sort;
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useSWR<PaginatedResult<UserRole>>([ 'roles', page, filters, sort, sortDirection ], async () => {
-        const { data } = await http.get('/api/application/roles', { params: { include: include.join(','), page, ...params } });
+    return useSWR<PaginatedResult<UserRole>>(['roles', page, filters, sort, sortDirection], async () => {
+        const { data } = await http.get('/api/application/roles', {
+            params: { include: include.join(','), page, ...params },
+        });
 
-        return ({
+        return {
             items: (data.data || []).map(Transformers.toUserRole),
             pagination: getPaginationSet(data.meta.pagination),
-        });
+        };
     });
 };
 
-export {
-    createRole,
-    deleteRole,
-    getRole,
-    searchRoles,
-    updateRole,
-    getRoles,
-};
+export { createRole, deleteRole, getRole, searchRoles, updateRole, getRoles };

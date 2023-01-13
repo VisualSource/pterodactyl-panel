@@ -33,7 +33,7 @@ export interface Node {
     relations: {
         databaseHost: Database | undefined;
         location: Location | undefined;
-    }
+    };
 }
 
 export const rawDataToNode = ({ attributes }: FractalResponseData): Node => ({
@@ -63,8 +63,15 @@ export const rawDataToNode = ({ attributes }: FractalResponseData): Node => ({
 
     relations: {
         // eslint-disable-next-line camelcase
-        databaseHost: attributes.relationships?.database_host !== undefined && attributes.relationships?.database_host.object !== 'null_resource' ? rawDataToDatabase(attributes.relationships.database_host as FractalResponseData) : undefined,
-        location: attributes.relationships?.location !== undefined ? rawDataToLocation(attributes.relationships.location as FractalResponseData) : undefined,
+        databaseHost:
+            attributes.relationships?.database_host !== undefined &&
+            attributes.relationships?.database_host.object !== 'null_resource'
+                ? rawDataToDatabase(attributes.relationships.database_host as FractalResponseData)
+                : undefined,
+        location:
+            attributes.relationships?.location !== undefined
+                ? rawDataToLocation(attributes.relationships.location as FractalResponseData)
+                : undefined,
     },
 });
 
@@ -86,22 +93,24 @@ export default (include: string[] = []) => {
     const params = {};
     if (filters !== null) {
         Object.keys(filters).forEach(key => {
-            // @ts-ignore
+            // @ts-expect-error todo
             params['filter[' + key + ']'] = filters[key];
         });
     }
 
     if (sort !== null) {
-        // @ts-ignore
+        // @ts-expect-error todo
         params.sort = (sortDirection ? '-' : '') + sort;
     }
 
-    return useSWR<PaginatedResult<Node>>([ 'nodes', page, filters, sort, sortDirection ], async () => {
-        const { data } = await http.get('/api/application/nodes', { params: { include: include.join(','), page, ...params } });
+    return useSWR<PaginatedResult<Node>>(['nodes', page, filters, sort, sortDirection], async () => {
+        const { data } = await http.get('/api/application/nodes', {
+            params: { include: include.join(','), page, ...params },
+        });
 
-        return ({
+        return {
             items: (data.data || []).map(rawDataToNode),
             pagination: getPaginationSet(data.meta.pagination),
-        });
+        };
     });
 };

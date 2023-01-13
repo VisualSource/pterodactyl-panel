@@ -25,12 +25,12 @@ export interface Values {
 export default (values: Values, include: string[] = []): Promise<Node> => {
     const data = {};
 
-    Object.keys(values).forEach((key) => {
+    Object.keys(values).forEach(key => {
         const key2 = key
             .replace('HTTP', 'Http')
             .replace('SFTP', 'Sftp')
             .replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-        // @ts-ignore
+        // @ts-expect-error todo
         data[key2] = values[key];
     });
 

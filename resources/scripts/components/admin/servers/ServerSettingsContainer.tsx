@@ -12,7 +12,7 @@ import BaseSettingsBox from '@/components/admin/servers/settings/BaseSettingsBox
 import FeatureLimitsBox from '@/components/admin/servers/settings/FeatureLimitsBox';
 import NetworkingBox from '@/components/admin/servers/settings/NetworkingBox';
 import ServerResourceBox from '@/components/admin/servers/settings/ServerResourceBox';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/elements/button';
 
 export default () => {
     const { data: server } = useServerFromRoute();
@@ -48,7 +48,7 @@ export default () => {
             initialValues={{
                 externalId: server.externalId || '',
                 name: server.name,
-                ownerId: server.userId,
+                ownerId: server.ownerId,
                 limits: {
                     memory: server.limits.memory,
                     swap: server.limits.swap,
@@ -79,17 +79,15 @@ export default () => {
                             <FeatureLimitsBox />
                             <NetworkingBox />
                         </div>
+
                         <div css={tw`flex flex-col`}>
                             <ServerResourceBox />
+
                             <div css={tw`bg-neutral-700 rounded shadow-md px-4 xl:px-5 py-4 mt-6`}>
                                 <div css={tw`flex flex-row`}>
                                     <ServerDeleteButton />
-                                    <Button
-                                        type="submit"
-                                        size="small"
-                                        css={tw`ml-auto`}
-                                        disabled={isSubmitting || !isValid}
-                                    >
+
+                                    <Button type="submit" className="ml-auto" disabled={isSubmitting || !isValid}>
                                         Save Changes
                                     </Button>
                                 </div>
