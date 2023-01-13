@@ -10,6 +10,8 @@ import {
     UserGroupIcon,
     UsersIcon,
     ViewGridIcon,
+    TagIcon,
+    RssIcon
 } from '@heroicons/react/outline';
 import { useStoreState } from 'easy-peasy';
 import { useState } from 'react';
@@ -46,6 +48,7 @@ import type { ApplicationStore } from '@/state';
 import Sidebar from '@/components/admin/Sidebar';
 // import useUserPersistedState from '@/plugins/useUserPersistedState';
 import UsersContainer from '@/components/admin/users/UsersContainer';
+import DomainsContainer from '@/components/admin/domains/DomainsContainer';
 
 function AdminRouter() {
     const email = useStoreState((state: ApplicationStore) => state.user.data!.email);
@@ -113,6 +116,14 @@ function AdminRouter() {
                         <FolderIcon />
                         <span>Mounts</span>
                     </NavLink>
+                    <NavLink to="/admin/domains">
+                        <TagIcon />
+                        <span>Domains</span>
+                    </NavLink>
+                    <NavLink to="/admin/ports">
+                        <RssIcon />
+                        <span>Ports</span>
+                    </NavLink>
                 </Sidebar.Wrapper>
                 <NavLink to="/" css={tw`mt-auto mb-3`}>
                     <ReplyIcon />
@@ -169,6 +180,7 @@ function AdminRouter() {
                         <Route path="mounts" element={<MountsContainer />} />
                         <Route path="mounts/new" element={<NewMountContainer />} />
                         <Route path="mounts/:id" element={<MountEditContainer />} />
+                        <Route path="domains" element={<DomainsContainer/>} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

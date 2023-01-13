@@ -25,10 +25,12 @@ class DomainCreationService
     {
         $domain = $this->repository->create($data);
 
-        Artisan::queue("network:domain",[
-            "name" => $domain->domain,
-            "--unregister" => true
-        ]);
+        if(!env("TH_NETWORK_DRYRUN",false)) { 
+            Artisan::queue("network:domain",[
+                "name" => $domain->domain,
+                "--unregister" => true
+            ]);
+        }
 
         return $domain;
     }

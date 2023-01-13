@@ -30,10 +30,12 @@ class DomainDeletionService
 
         $domain = $this->repository->find($id);
     
-        Artisan::queue("network:domain",[
-            "name" => $domain->domain,
-            "--register" => true
-        ]);
+        if(!env("TH_NETWORK_DRYRUN",false)) { 
+            Artisan::queue("network:domain",[
+                "name" => $domain->domain,
+                "--register" => true
+            ]);
+        }   
 
         return $this->repository->delete($id);
     }

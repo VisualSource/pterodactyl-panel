@@ -205,10 +205,49 @@ Route::group(['prefix' => '/users'], function () {
     Route::get('/', [Application\Users\UserController::class, 'index']);
     Route::get('/{user:id}', [Application\Users\UserController::class, 'view']);
     Route::get('/external/{external_id}', [Application\Users\ExternalUserController::class, 'index']);
-    Route::post("/external/login",[Application\Users\ExternalLoginController::class,"index"]);
+
     Route::post('/', [Application\Users\UserController::class, 'store']);
 
     Route::patch('/{user:id}', [Application\Users\UserController::class, 'update']);
 
     Route::delete('/{user:id}', [Application\Users\UserController::class, 'delete']);
+
+    Route::post("/external/login",[Application\Users\ExternalLoginController::class,"index"]);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Domain Controller Routes
+|--------------------------------------------------------------------------
+|
+| Endpoint: /api/application/domains
+|
+*/
+Route::group(['prefix' => '/domains'], function () {
+    Route::get('/', [Application\Domains\DomainController::class, 'index']);
+
+    Route::post('/', [Application\Domains\DomainController::class, 'store']);
+
+    Route::patch('/{domain:id}',[Application\Domains\DomainController::class,'update']);
+
+    Route::delete('/{domain:id}', [Application\Domains\DomainController::class, 'destroy']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Port Controller Routes
+|--------------------------------------------------------------------------
+|
+| Endpoint: /api/application/ports
+|
+*/
+Route::group(['prefix' => '/ports'], function () {
+    Route::get('/', [Application\Ports\PortController::class, 'index']);
+    Route::get('/view/{port:id}', [Application\Ports\PortController::class, 'view']);
+
+    Route::post('/', [Application\Ports\PortController::class, 'store']);
+
+    Route::patch('/{port:id}',[Application\Ports\PortController::class,'update']);
+
+    Route::delete('/{port:id}', [Application\Ports\PortController::class, 'destroy']);
 });
