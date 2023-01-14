@@ -49,6 +49,10 @@ import Sidebar from '@/components/admin/Sidebar';
 // import useUserPersistedState from '@/plugins/useUserPersistedState';
 import UsersContainer from '@/components/admin/users/UsersContainer';
 import DomainsContainer from '@/components/admin/domains/DomainsContainer';
+import DomainEditContainer from '@/components/admin/domains/DomainEditContainer';
+import PortsContainer from '@/components/admin/ports/PortsContainer';
+import PortEditContainer from '@/components/admin/ports/PortEditcontainer';
+import NewPortContainer from '@/components/admin/ports/NewPortContainer';
 
 function AdminRouter() {
     const email = useStoreState((state: ApplicationStore) => state.user.data!.email);
@@ -181,6 +185,10 @@ function AdminRouter() {
                         <Route path="mounts/new" element={<NewMountContainer />} />
                         <Route path="mounts/:id" element={<MountEditContainer />} />
                         <Route path="domains" element={<DomainsContainer/>} />
+                        <Route path="domains/:id" element={<DomainEditContainer/>} />
+                        <Route path="ports" element={<PortsContainer/>} />
+                        <Route path="ports/new" element={<NewPortContainer/>} />
+                        <Route path="ports/:id" element={<PortEditContainer/>} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

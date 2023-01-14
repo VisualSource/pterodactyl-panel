@@ -29,7 +29,7 @@ const schema = object().shape({
 
 export default function NewDomainButton(){
     const [visible, setVisible] = useState(false);
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
+    const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
     const { mutate } = getDomains(["server"]);
 
     const submit = ({ domain, server_id }: Values, { setSubmitting }: FormikHelpers<Values>) => {
@@ -40,6 +40,7 @@ export default function NewDomainButton(){
             .then(async domain => {
                 await mutate(data => ({ ...data!, items: data!.items.concat(domain) }), false);
                 setVisible(false);
+                addFlash({ key: "domains", message: `The subdomain (${domain.domain}) will be ready in 2-5 minutes.`, type: "success" });
             })
             .catch(error => {
                 clearAndAddHttpError({ key: 'domain:create', error });

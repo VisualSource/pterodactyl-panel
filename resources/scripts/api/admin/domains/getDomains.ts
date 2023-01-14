@@ -3,17 +3,19 @@ import { useContext } from 'react';
 import useSWR from 'swr';
 import { createContext } from '@/api/admin';
 
+export interface ServerLike { name: string; identifier: string; id: number; }
+
 export interface Domain {
     id: number;
     domain: string;
-    server_id: number;
+    server_id: number | null;
     createdAt: Date;
     updatedAt: Date;
-    server: null | { name: string; identifier: string; id: number; }
+    server: null | ServerLike
 }
 
 export const rawDataToDomain = ({  attributes  }: FractalResponseData ): Domain => {
-    let server: { name: string; identifier: string; id: number; } | null = null;
+    let server: ServerLike | null = null;
 
     if(attributes.server_id && attributes.relationships?.server) {
         const data = (attributes.relationships.server as FractalResponseData).attributes;

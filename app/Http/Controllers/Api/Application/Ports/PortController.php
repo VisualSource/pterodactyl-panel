@@ -42,7 +42,7 @@ class PortController extends ApplicationApiController
         }
 
         $ports = QueryBuilder::for(Port::query())
-            ->allowedFilters(['external_port', 'type'])
+            ->allowedFilters(['external_port', 'type','method'])
             ->allowedSorts(['id', 'type', 'external_port','internal_port','internal_address'])
             ->paginate($perPage);
 

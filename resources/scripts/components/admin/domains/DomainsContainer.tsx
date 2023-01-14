@@ -1,9 +1,9 @@
 import type { ChangeEvent } from 'react';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import tw from 'twin.macro';
 
-import getDomains, { Context as DomainsContext, type Filters } from '@/api/admin/domains/getDomains';
+import getDomains, { Context as DomainsContext, type Domain, type Filters } from '@/api/admin/domains/getDomains';
 import AdminContentBlock from '@/components/admin/AdminContentBlock';
 import AdminCheckbox from '@/components/admin/AdminCheckbox';
 import AdminTable, {
@@ -22,7 +22,6 @@ import CopyOnClick from '@/components/elements/CopyOnClick';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
 import { AdminContext } from '@/state/admin';
-import DomainEditButton from './DomainEditButton';
 
 function RowCheckbox({ id }: { id: number }) {
     const isChecked = AdminContext.useStoreState(state => state.locations.selectedLocations.indexOf(id) >= 0);
@@ -151,7 +150,12 @@ function DomainsContainer() {
                                                 </td>
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
-                                                    <DomainEditButton data={domain} />
+                                                    <NavLink
+                                                         to={`/admin/domains/${domain.id}`}
+                                                         css={tw`text-primary-400 hover:text-primary-300`}
+                                                        >
+                                                            {domain.domain}
+                                                    </NavLink>
                                                 </td>
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>

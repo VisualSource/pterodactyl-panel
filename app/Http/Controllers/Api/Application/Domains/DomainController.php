@@ -17,6 +17,7 @@ use Pterodactyl\Services\Domains\DomainCreationService;
 use Pterodactyl\Services\Domains\DomainDeletionService;
 use Pterodactyl\Transformers\Api\Application\DomainTransformer;
 use Pterodactyl\Exceptions\Http\QueryValueOutOfRangeHttpException;
+use Pterodactyl\Http\Requests\Api\Application\Domains\GetDomainRequest;
 use Pterodactyl\Http\Requests\Api\Application\Domains\GetDomainsRequest;
 use Pterodactyl\Http\Requests\Api\Application\Domains\StoreDomainRequest;
 use Pterodactyl\Http\Requests\Api\Application\Domains\DeleteDomainRequest;
@@ -53,6 +54,13 @@ class DomainController extends ApplicationApiController
             ->paginate($perPage);
 
         return $this->fractal->collection($domains)
+            ->transformWith(DomainTransformer::class)
+            ->toArray();
+    }
+
+    public function view(GetDomainRequest $request, Domain $domain): array
+    {
+        return $this->fractal->item($domain)
             ->transformWith(DomainTransformer::class)
             ->toArray();
     }

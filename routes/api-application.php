@@ -225,7 +225,8 @@ Route::group(['prefix' => '/users'], function () {
 */
 Route::group(['prefix' => '/domains'], function () {
     Route::get('/', [Application\Domains\DomainController::class, 'index']);
-
+    Route::get("/{domain:id}",[Application\Domains\DomainController::class, 'view']);
+    
     Route::post('/', [Application\Domains\DomainController::class, 'store']);
 
     Route::patch('/{domain:id}',[Application\Domains\DomainController::class,'update']);
@@ -243,7 +244,7 @@ Route::group(['prefix' => '/domains'], function () {
 */
 Route::group(['prefix' => '/ports'], function () {
     Route::get('/', [Application\Ports\PortController::class, 'index']);
-    Route::get('/view/{port:id}', [Application\Ports\PortController::class, 'view']);
+    Route::get('/{port:id}', [Application\Ports\PortController::class, 'view']);
 
     Route::post('/', [Application\Ports\PortController::class, 'store']);
 
