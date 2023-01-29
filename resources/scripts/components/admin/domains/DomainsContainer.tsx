@@ -33,8 +33,7 @@ function RowCheckbox({ id }: { id: number }) {
             name={id.toString()}
             checked={isChecked}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                if (e.currentTarget.checked) 
-                    return appendSelectedDomain(id);
+                if (e.currentTarget.checked) return appendSelectedDomain(id);
 
                 removeSelectedDomain(id);
             }}
@@ -45,32 +44,32 @@ function RowCheckbox({ id }: { id: number }) {
 function DomainsContainer() {
     const { page, setPage, setFilters, sort, setSort, sortDirection } = useContext(DomainsContext);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { data: domains, error, isValidating } = getDomains(["server"]);
+    const { data: domains, error, isValidating } = getDomains(['server']);
 
-    useEffect(()=>{
-        if(!error) {
-            clearFlashes("domains");
+    useEffect(() => {
+        if (!error) {
+            clearFlashes('domains');
             return;
         }
 
-        clearAndAddHttpError({ key: "domains", error });
-    },[error]);
+        clearAndAddHttpError({ key: 'domains', error });
+    }, [error]);
 
     const length = domains?.items.length ?? 0;
 
-    const setSelectedDomains = AdminContext.useStoreActions(actions=>actions.domains.setSelectedDomains);
+    const setSelectedDomains = AdminContext.useStoreActions(actions => actions.domains.setSelectedDomains);
     const selectedDomainsLength = AdminContext.useStoreState(state => state.domains.selectedDomains.length);
 
     const onSelectAllClick = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedDomains(e.currentTarget.checked ? domains?.items.map(domain=>domain.id) ?? [] : []);
-    }
+        setSelectedDomains(e.currentTarget.checked ? domains?.items.map(domain => domain.id) ?? [] : []);
+    };
 
     const onSearch = (query: string): Promise<void> => {
         return new Promise(ok => {
-            if(query.length < 2) return ok(setFilters(null));
+            if (query.length < 2) return ok(setFilters(null));
             return ok(setFilters({ domain: query }));
         });
-    }
+    };
 
     useEffect(() => {
         setSelectedDomains([]);
@@ -135,7 +134,7 @@ function DomainsContainer() {
                                         !error &&
                                         !isValidating &&
                                         length > 0 &&
-                                            domains.items.map(domain => (
+                                        domains.items.map(domain => (
                                             <TableRow key={domain.id}>
                                                 <td css={tw`pl-6`}>
                                                     <RowCheckbox id={domain.id} />
@@ -151,31 +150,37 @@ function DomainsContainer() {
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
                                                     <NavLink
-                                                         to={`/admin/domains/${domain.id}`}
-                                                         css={tw`text-primary-400 hover:text-primary-300`}
-                                                        >
-                                                            {domain.domain}
+                                                        to={`/admin/domains/${domain.id}`}
+                                                        css={tw`text-primary-400 hover:text-primary-300`}
+                                                    >
+                                                        {domain.domain}
                                                     </NavLink>
                                                 </td>
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
-                                                    { domain.server_id ? (
+                                                    {domain.server_id ? (
                                                         <NavLink
-                                                         to={`/admin/servers/${domain.server_id}`}
-                                                         css={tw`text-primary-400 hover:text-primary-300`}
+                                                            to={`/admin/servers/${domain.server_id}`}
+                                                            css={tw`text-primary-400 hover:text-primary-300`}
                                                         >
-                                                            { domain.server_id ? `${domain.server?.name ?? "Unkown Server"} | ${domain.server?.identifier ?? ""}` : "Unkown Server"}
+                                                            {domain.server_id
+                                                                ? `${domain.server?.name ?? 'Unkown Server'} | ${
+                                                                      domain.server?.identifier ?? ''
+                                                                  }`
+                                                                : 'Unkown Server'}
                                                         </NavLink>
                                                     ) : (
                                                         <span css={tw`text-neutral-200`}>No Server set.</span>
-                                                    ) }
+                                                    )}
                                                 </td>
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
-                                                    {domain.updatedAt.toDateString()} - {domain.updatedAt.toLocaleTimeString()}
+                                                    {domain.updatedAt.toDateString()} -{' '}
+                                                    {domain.updatedAt.toLocaleTimeString()}
                                                 </td>
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
-                                                    {domain.createdAt.toDateString()} - {domain.createdAt.toLocaleTimeString()}
+                                                    {domain.createdAt.toDateString()} -{' '}
+                                                    {domain.createdAt.toLocaleTimeString()}
                                                 </td>
                                             </TableRow>
                                         ))}
@@ -189,10 +194,8 @@ function DomainsContainer() {
                             ) : null}
                         </div>
                     </Pagination>
-
                 </ContentWrapper>
             </AdminTable>
-
         </AdminContentBlock>
     );
 }
@@ -202,7 +205,7 @@ export default () => {
 
     return (
         <DomainsContext.Provider value={hooks}>
-            <DomainsContainer/>
+            <DomainsContainer />
         </DomainsContext.Provider>
     );
-}
+};

@@ -8,17 +8,17 @@ interface CreateProps {
     type: string;
     method: string;
     description?: string | null;
-    internal_address?: string | null; 
+    internal_address?: string | null;
 }
 
 export default (data: CreateProps, include: string[] = []): Promise<Port> => {
-    return new Promise((ok,rej)=>{
-        http.post("/api/application/ports",data,{
+    return new Promise((ok, rej) => {
+        http.post('/api/application/ports', data, {
             params: {
-                include: include.join(",")
-            }
+                include: include.join(','),
+            },
         })
-        .then(({data})=>ok(rawDataToPort(data)))
-        .catch(rej)
+            .then(({ data }) => ok(rawDataToPort(data)))
+            .catch(rej);
     });
-} 
+};

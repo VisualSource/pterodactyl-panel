@@ -10,19 +10,17 @@ interface Filters {
 type FilterName = `filter[${keyof Filters}]`;
 
 export default (filters?: Filters): Promise<Server[]> => {
-    const params: Partial<Record<FilterName,any>> = {};
+    const params: Partial<Record<FilterName, any>> = {};
 
-    if(filters) {
+    if (filters) {
         Object.keys(filters).forEach(key => {
             params[`filter[${key}]` as FilterName] = filters[key as keyof typeof filters];
         });
     }
 
-    return new Promise((ok,rej)=>{
-        http.get("/api/application/servers",{ params })
-        .then(resp=> ok(
-            (resp.data.data ?? []).map(rawDataToServer)
-        ))
-        .catch(rej)
+    return new Promise((ok, rej) => {
+        http.get('/api/application/servers', { params })
+            .then(resp => ok((resp.data.data ?? []).map(rawDataToServer)))
+            .catch(rej);
     });
-}
+};

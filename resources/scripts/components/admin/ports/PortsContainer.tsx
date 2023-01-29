@@ -18,7 +18,7 @@ import AdminCheckbox from '@/components/admin/AdminCheckbox';
 import tw from 'twin.macro';
 import getPorts, { type Filters, Context as PortsContext } from '@/api/admin/ports/getPorts';
 import AdminContentBlock from '@/components/admin/AdminContentBlock';
-import FlashMessageRender from "@/components/FlashMessageRender";
+import FlashMessageRender from '@/components/FlashMessageRender';
 import { AdminContext } from '@/state/admin';
 import Button from '@/components/elements/Button';
 
@@ -42,10 +42,10 @@ function RowCheckbox({ id }: { id: number }) {
     );
 }
 
-function PortsContainer(){
+function PortsContainer() {
     const { page, setPage, setFilters, sort, setSort, sortDirection } = useContext(PortsContext);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const { data: ports, error, isValidating} = getPorts();
+    const { data: ports, error, isValidating } = getPorts();
 
     useEffect(() => {
         if (!error) {
@@ -55,7 +55,7 @@ function PortsContainer(){
 
         clearAndAddHttpError({ key: 'ports', error });
     }, [error]);
-    
+
     const length = ports?.items?.length || 0;
     const setSelectedPorts = AdminContext.useStoreActions(actions => actions.ports.setSelectedPorts);
     const selectedPortsLength = AdminContext.useStoreState(state => state.ports.selectedPorts.length);
@@ -75,7 +75,6 @@ function PortsContainer(){
         });
     };
 
-    
     useEffect(() => {
         setSelectedPorts([]);
     }, [page]);
@@ -92,7 +91,7 @@ function PortsContainer(){
 
                 <div css={tw`flex ml-auto pl-4`}>
                     <NavLink to={`/admin/ports/new`}>
-                        <Button type='button' size='large' css={tw`h-10 px-4 py-0 whitespace-nowrap`}>
+                        <Button type="button" size="large" css={tw`h-10 px-4 py-0 whitespace-nowrap`}>
                             New Port
                         </Button>
                     </NavLink>
@@ -102,34 +101,32 @@ function PortsContainer(){
             <FlashMessageRender byKey={'ports'} css={tw`mb-4`} />
 
             <AdminTable>
-                <ContentWrapper 
+                <ContentWrapper
                     checked={selectedPortsLength === (length === 0 ? -1 : length)}
                     onSelectAllClick={onSelectAllClick}
                     onSearch={onSearch}
                 >
                     <Pagination data={ports} onPageSelect={setPage}>
-                    <div css={tw`overflow-x-auto`}>
+                        <div css={tw`overflow-x-auto`}>
                             <table css={tw`w-full table-auto`}>
                                 <TableHead>
                                     <TableHeader
-                                        name='ID'
+                                        name="ID"
                                         direction={sort === 'id' ? (sortDirection ? 1 : 2) : null}
                                         onClick={() => setSort('id')}
                                     />
                                     <TableHeader
-                                        name='External Port'
+                                        name="External Port"
                                         direction={sort === 'external_port' ? (sortDirection ? 1 : 2) : null}
                                         onClick={() => setSort('external_port')}
                                     />
+                                    <TableHeader name="Description" />
                                     <TableHeader
-                                        name='Description'
-                                    />
-                                     <TableHeader
                                         name="Type"
                                         direction={sort === 'type' ? (sortDirection ? 1 : 2) : null}
                                         onClick={() => setSort('type')}
                                     />
-                                     <TableHeader
+                                    <TableHeader
                                         name="Method"
                                         direction={sort === 'method' ? (sortDirection ? 1 : 2) : null}
                                         onClick={() => setSort('method')}
@@ -165,7 +162,7 @@ function PortsContainer(){
                                                 </td>
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
-                                                    {port.description ?? "Pterodactyl Port"}
+                                                    {port.description ?? 'Pterodactyl Port'}
                                                 </td>
 
                                                 <td css={tw`px-6 text-sm text-neutral-200 text-left whitespace-nowrap`}>
@@ -187,10 +184,8 @@ function PortsContainer(){
                             ) : null}
                         </div>
                     </Pagination>
-
                 </ContentWrapper>
             </AdminTable>
-
         </AdminContentBlock>
     );
 }
@@ -199,7 +194,7 @@ export default () => {
     const hooks = useTableHooks<Filters>();
     return (
         <PortsContext.Provider value={hooks}>
-            <PortsContainer/>
+            <PortsContainer />
         </PortsContext.Provider>
     );
-}
+};

@@ -18,8 +18,8 @@ import type { AdminServerStore } from '@/state/admin/servers';
 import servers from '@/state/admin/servers';
 import type { AdminUserStore } from '@/state/admin/users';
 import users from '@/state/admin/users';
-import domains, { type AdminDomainStore } from "@/state/admin/domains";
-import ports, { type AdminPortStore } from "@/state/admin/ports";
+import domains, { type AdminDomainStore } from '@/state/admin/domains';
+import ports, { type AdminPortStore } from '@/state/admin/ports';
 interface AdminStore {
     allocations: AdminAllocationStore;
     databases: AdminDatabaseStore;
@@ -45,5 +45,5 @@ export const AdminContext = createContextStore<AdminStore>({
     servers,
     users,
     domains,
-    ports
+    ports,
 });

@@ -7,7 +7,7 @@ export interface AdminPortStore {
     removeSelectedPort: Action<AdminPortStore, number>;
 }
 
-const ports: AdminPortStore  = {
+const ports: AdminPortStore = {
     selectedPorts: [],
 
     setSelectedPorts: action((state, payload) => {

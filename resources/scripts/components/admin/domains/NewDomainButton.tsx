@@ -21,16 +21,20 @@ interface Values {
 
 const schema = object().shape({
     domain: string()
-    .required("A subdomain must be provided.")
-    .min(6,"Subdomain must be longer then 6 characters.")
-    .max(255,"Subdomain must be less then 255 characters"),
-    server_id: number().notRequired().nullable().integer("Server id must be a integer.").positive("Must be a positive number.")
+        .required('A subdomain must be provided.')
+        .min(6, 'Subdomain must be longer then 6 characters.')
+        .max(255, 'Subdomain must be less then 255 characters'),
+    server_id: number()
+        .notRequired()
+        .nullable()
+        .integer('Server id must be a integer.')
+        .positive('Must be a positive number.'),
 });
 
-export default function NewDomainButton(){
+export default function NewDomainButton() {
     const [visible, setVisible] = useState(false);
     const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
-    const { mutate } = getDomains(["server"]);
+    const { mutate } = getDomains(['server']);
 
     const submit = ({ domain, server_id }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('domain:create');
@@ -40,7 +44,11 @@ export default function NewDomainButton(){
             .then(async domain => {
                 await mutate(data => ({ ...data!, items: data!.items.concat(domain) }), false);
                 setVisible(false);
-                addFlash({ key: "domains", message: `The subdomain (${domain.domain}) will be ready in 2-5 minutes.`, type: "success" });
+                addFlash({
+                    key: 'domains',
+                    message: `The subdomain (${domain.domain}) will be ready in 2-5 minutes.`,
+                    type: 'success',
+                });
             })
             .catch(error => {
                 clearAndAddHttpError({ key: 'domain:create', error });
@@ -50,7 +58,11 @@ export default function NewDomainButton(){
 
     return (
         <>
-            <Formik onSubmit={submit} initialValues={{ domain: '', server_id: null } as Values} validationSchema={schema}>
+            <Formik
+                onSubmit={submit}
+                initialValues={{ domain: '', server_id: null } as Values}
+                validationSchema={schema}
+            >
                 {({ isSubmitting, resetForm }) => (
                     <Modal
                         visible={visible}
@@ -77,7 +89,7 @@ export default function NewDomainButton(){
                             />
 
                             <div css={tw`mt-6`}>
-                                <ServerSelect selected={null}/>
+                                <ServerSelect selected={null} />
                             </div>
 
                             <div css={tw`flex flex-wrap justify-end mt-6`}>

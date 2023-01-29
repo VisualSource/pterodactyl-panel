@@ -4,14 +4,14 @@ import useSWR from 'swr';
 import { createContext } from '@/api/admin';
 
 export const portTypes = {
-    UDP: "udp",
-    TCP: "tcp",
-    Both: "both"
+    UDP: 'udp',
+    TCP: 'tcp',
+    Both: 'both',
 } as const;
 
 export const portMethods = {
-    PMP: "pmp",
-    UPNP: "upnp"
+    PMP: 'pmp',
+    UPNP: 'upnp',
 } as const;
 
 export type PortType = keyof typeof portTypes;
@@ -22,8 +22,8 @@ export interface Port {
     allocation_id: number;
     internal_port: number | null;
     external_port: number;
-    type: PortType
-    method: PortMethod,
+    type: PortType;
+    method: PortMethod;
     description: string | null;
     internal_address: `${number}.${number}.${number}.${number}` | null;
     createdAt: Date;
@@ -41,9 +41,9 @@ export const rawDataToPort = ({ attributes }: FractalResponseData): Port => {
         description: attributes.description,
         internal_address: attributes.internal_address,
         createdAt: new Date(attributes.created_at),
-        updatedAt: new Date(attributes.updated_at)
-    }
-}
+        updatedAt: new Date(attributes.updated_at),
+    };
+};
 
 export interface Filters {
     id?: string;
@@ -58,34 +58,32 @@ export const Context = createContext<Filters>();
 
 export default (include: string[] = []) => {
     const { page, filters, sort, sortDirection } = useContext(Context);
-    const params: { [key: FilterName]: any; sort?: string; } = {};
+    const params: { [key: FilterName]: any; sort?: string } = {};
 
-    if(filters) {
-        Object.keys(filters).forEach(key=>{
+    if (filters) {
+        Object.keys(filters).forEach(key => {
             params[`filter[${key}]`] = filters[key as keyof typeof filters];
         });
     }
 
-    if(sort) {
-        params.sort = `${sortDirection ? "-" : ""}${sort}`;
+    if (sort) {
+        params.sort = `${sortDirection ? '-' : ''}${sort}`;
     }
 
-    const includes = include.join(",");
+    const includes = include.join(',');
 
-    return useSWR<PaginatedResult<Port>>(["ports",page,filters,sort,sortDirection,includes],async () =>{
-        const { data } = await http.get("/api/application/ports",{
+    return useSWR<PaginatedResult<Port>>(['ports', page, filters, sort, sortDirection, includes], async () => {
+        const { data } = await http.get('/api/application/ports', {
             params: {
                 include: includes,
                 page,
-                ...params
-            }
+                ...params,
+            },
         });
 
         return {
             items: (data.data ?? []).map(rawDataToPort),
             pagination: getPaginationSet(data.meta.pagination),
-        }
+        };
     });
-}
-
-
+};

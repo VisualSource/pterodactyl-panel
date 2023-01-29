@@ -15,14 +15,13 @@ const schema = object({
     allocation_id: number().positive().required().integer(),
     internal_port: number().optional().notRequired().positive().integer(),
     external_port: number().integer().positive().required(),
-    type: string().oneOf(["both","udp","tcp"]).required().default("both"),
-    method: string().oneOf(["upnp","pmp"]).default("upnp"),
-    description: string().optional().default("Pterodactyl Game Port"),
-    internal_address: string().optional()
+    type: string().oneOf(['both', 'udp', 'tcp']).required().default('both'),
+    method: string().oneOf(['upnp', 'pmp']).default('upnp'),
+    description: string().optional().default('Pterodactyl Game Port'),
+    internal_address: string().optional(),
 }).required();
 
 type FormState = InferType<typeof schema>;
-
 
 function InternalForm() {
     const { isSubmitting, isValid } = useFormikContext<FormState>();
@@ -30,14 +29,13 @@ function InternalForm() {
     return (
         <Form>
             <div css={tw`grid grid-cols-2 gap-y-6 gap-x-8 mb-16`}>
-                
                 <div css={tw`grid grid-cols-1 gap-y-6 col-span-2 md:col-span-1`}>
-                    <PortBaseSettings/>
+                    <PortBaseSettings />
                 </div>
                 <div css={tw`grid grid-cols-1 gap-y-6 col-span-2 md:col-span-1`}>
-                    <AdvPortSettings/>
+                    <AdvPortSettings />
                 </div>
-                
+
                 <div css={tw`bg-neutral-700 rounded shadow-md px-4 py-3 col-span-2`}>
                     <div css={tw`flex flex-row`}>
                         <Button type="submit" size="small" css={tw`ml-auto`} disabled={isSubmitting || !isValid}>
@@ -45,27 +43,26 @@ function InternalForm() {
                         </Button>
                     </div>
                 </div>
-
             </div>
         </Form>
     );
 }
 
-export default function NewPortContainer(){
+export default function NewPortContainer() {
     const navigate = useNavigate();
     const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
 
     const submit = (r: FormState, { setSubmitting }: FormikHelpers<FormState>) => {
-        clearFlashes("port:create");
+        clearFlashes('port:create');
 
         createPort(r)
-        .then(() => {
-            addFlash({ key: "ports", message: "Port will be ready soon.", type: "success" });
-            navigate(`/admin/ports`);
-        })
-        .catch(error=>clearAndAddHttpError({ key: "port:create", error }))
-        .then(()=>setSubmitting(false));
-    }
+            .then(() => {
+                addFlash({ key: 'ports', message: 'Port will be ready soon.', type: 'success' });
+                navigate(`/admin/ports`);
+            })
+            .catch(error => clearAndAddHttpError({ key: 'port:create', error }))
+            .then(() => setSubmitting(false));
+    };
 
     return (
         <AdminContentBlock title="New Port">
@@ -76,14 +73,13 @@ export default function NewPortContainer(){
                         Add a new port to the panel.
                     </p>
                 </div>
-            </div>  
+            </div>
 
             <FlashMessageRender byKey={'port:create'} css={tw`mb-4`} />
 
             <Formik onSubmit={submit} initialValues={schema.getDefault() as FormState} validationSchema={schema}>
-                <InternalForm/>
+                <InternalForm />
             </Formik>
-
         </AdminContentBlock>
     );
 }

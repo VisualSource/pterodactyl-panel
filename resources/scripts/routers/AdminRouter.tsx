@@ -11,7 +11,7 @@ import {
     UsersIcon,
     ViewGridIcon,
     TagIcon,
-    RssIcon
+    RssIcon,
 } from '@heroicons/react/outline';
 import { useStoreState } from 'easy-peasy';
 import { useState } from 'react';
@@ -184,11 +184,11 @@ function AdminRouter() {
                         <Route path="mounts" element={<MountsContainer />} />
                         <Route path="mounts/new" element={<NewMountContainer />} />
                         <Route path="mounts/:id" element={<MountEditContainer />} />
-                        <Route path="domains" element={<DomainsContainer/>} />
-                        <Route path="domains/:id" element={<DomainEditContainer/>} />
-                        <Route path="ports" element={<PortsContainer/>} />
-                        <Route path="ports/new" element={<NewPortContainer/>} />
-                        <Route path="ports/:id" element={<PortEditContainer/>} />
+                        <Route path="domains" element={<DomainsContainer />} />
+                        <Route path="domains/:id" element={<DomainEditContainer />} />
+                        <Route path="ports" element={<PortsContainer />} />
+                        <Route path="ports/new" element={<NewPortContainer />} />
+                        <Route path="ports/:id" element={<PortEditContainer />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>
