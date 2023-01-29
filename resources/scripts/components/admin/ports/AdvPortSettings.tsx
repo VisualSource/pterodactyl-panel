@@ -2,7 +2,7 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons';
 import { useFormikContext } from 'formik';
 import tw from 'twin.macro';
 
-import { portMethods, PortType, portTypes} from '@/api/admin/ports/getPorts';
+import { portMethods } from '@/api/admin/ports/getPorts';
 
 import AdminBox from '@/components/admin/AdminBox';
 import Field from '@/components/elements/Field';

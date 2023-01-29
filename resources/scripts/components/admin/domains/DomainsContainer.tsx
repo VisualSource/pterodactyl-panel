@@ -1,9 +1,9 @@
 import type { ChangeEvent } from 'react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import tw from 'twin.macro';
 
-import getDomains, { Context as DomainsContext, type Domain, type Filters } from '@/api/admin/domains/getDomains';
+import getDomains, { Context as DomainsContext, type Filters } from '@/api/admin/domains/getDomains';
 import AdminContentBlock from '@/components/admin/AdminContentBlock';
 import AdminCheckbox from '@/components/admin/AdminCheckbox';
 import AdminTable, {
