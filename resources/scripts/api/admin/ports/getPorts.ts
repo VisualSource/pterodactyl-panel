@@ -14,8 +14,8 @@ export const portMethods = {
     UPNP: "upnp"
 } as const;
 
-export type PortType = typeof portTypes;
-export type PortMethod = typeof portMethods;
+export type PortType = keyof typeof portTypes;
+export type PortMethod = keyof typeof portMethods;
 
 export interface Port {
     id: number;
@@ -82,7 +82,7 @@ export default (include: string[] = []) => {
         });
 
         return {
-            items: (data.data ?? [].map(rawDataToPort)),
+            items: (data.data ?? []).map(rawDataToPort),
             pagination: getPaginationSet(data.meta.pagination),
         }
     });

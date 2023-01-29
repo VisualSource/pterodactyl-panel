@@ -1,21 +1,31 @@
 import tw from 'twin.macro';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { object } from 'yup';
+import { object, number, string, InferType } from 'yup';
 import { Form, Formik, useFormikContext, type FormikHelpers } from 'formik';
 
 import Button from '@/components/elements/Button';
 import createPort from '@/api/admin/ports/createPort';
 import AdminContentBlock from '@/components/admin/AdminContentBlock';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FlashMessageRender from '@/components/FlashMessageRender';
 import useFlash from '@/plugins/useFlash';
 import PortBaseSettings from './PortBaseSettings';
+import AdvPortSettings from './AdvPortSettings';
 
-type FormState = any;
+const schema = object({
+    allocation_id: number().positive().required().integer(),
+    internal_port: number().optional().notRequired().positive().integer(),
+    external_port: number().integer().positive().required(),
+    type: string().oneOf(["both","udp","tcp"]).required().default("both"),
+    method: string().oneOf(["upnp","pmp"]).default("upnp"),
+    description: string().optional().default("Pterodactyl Game Port"),
+    internal_address: string().optional()
+}).required();
+
+type FormState = InferType<typeof schema>;
+
 
 function InternalForm() {
-    const { isSubmitting, isValid, setFieldValue, values } = useFormikContext<FormState>();
+    const { isSubmitting, isValid } = useFormikContext<FormState>();
 
     return (
         <Form>
@@ -23,6 +33,9 @@ function InternalForm() {
                 
                 <div css={tw`grid grid-cols-1 gap-y-6 col-span-2 md:col-span-1`}>
                     <PortBaseSettings/>
+                </div>
+                <div css={tw`grid grid-cols-1 gap-y-6 col-span-2 md:col-span-1`}>
+                    <AdvPortSettings/>
                 </div>
                 
                 <div css={tw`bg-neutral-700 rounded shadow-md px-4 py-3 col-span-2`}>
@@ -38,7 +51,6 @@ function InternalForm() {
     );
 }
 
-
 export default function NewPortContainer(){
     const navigate = useNavigate();
     const { clearFlashes, clearAndAddHttpError, addFlash } = useFlash();
@@ -49,9 +61,9 @@ export default function NewPortContainer(){
         createPort(r)
         .then(() => {
             addFlash({ key: "ports", message: "Port will be ready soon.", type: "success" });
-            navigate("/admin/ports");
+            navigate(`/admin/ports`);
         })
-        .catch(error=>clearAndAddHttpError({ key: "server:create", error }))
+        .catch(error=>clearAndAddHttpError({ key: "port:create", error }))
         .then(()=>setSubmitting(false));
     }
 
@@ -68,7 +80,7 @@ export default function NewPortContainer(){
 
             <FlashMessageRender byKey={'port:create'} css={tw`mb-4`} />
 
-            <Formik onSubmit={submit} initialValues={{}}>
+            <Formik onSubmit={submit} initialValues={schema.getDefault() as FormState} validationSchema={schema}>
                 <InternalForm/>
             </Formik>
 
