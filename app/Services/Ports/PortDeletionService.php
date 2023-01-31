@@ -13,8 +13,9 @@ class PortDeletionService
         protected PortRepositoryInterface $repository
     ) {
     }
+
     /**
-     * Unregisteds the port
+     * Unregisteds the port.
      *
      *  @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */

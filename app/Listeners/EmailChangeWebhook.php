@@ -20,8 +20,6 @@ class EmailChangeWebhook
     /**
      * Handle the event.
      *
-     * @param \Pterodactyl\Events\User\EmailChange $event
-     *
      * @return void
      */
     public function handle(EmailChange $event)

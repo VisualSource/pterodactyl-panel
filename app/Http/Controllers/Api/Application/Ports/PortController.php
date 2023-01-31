@@ -37,7 +37,7 @@ class PortController extends ApplicationApiController
     }
 
     /**
-     * Return all ports currently registerd on the Panel
+     * Return all ports currently registerd on the Panel.
      */
     public function index(GetPortsRequest $request): array
     {
