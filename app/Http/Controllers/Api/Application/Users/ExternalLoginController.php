@@ -66,7 +66,7 @@ class ExternalLoginController extends Controller
 
         Activity::event('auth:main-site')->withRequestMetadata()->subject($user)->log();
 
-        $data = $user->toVueObject();
+        $data = $user->toReactObject();
 
         $data['totp_secret'] = $user->totp_secret;
 

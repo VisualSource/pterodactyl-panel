@@ -17,7 +17,7 @@ class DomainDeletionService
     }
 
     /**
-     * @throws InvalidArgumentException
+     *
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
     public function handle(Domain|int $id): ?int

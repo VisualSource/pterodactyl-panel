@@ -36,11 +36,14 @@ class PortController extends ApplicationApiController
         parent::__construct();
     }
 
+    /**
+     * Return all ports currently registerd on the Panel
+     */
     public function index(GetPortsRequest $request): array
     {
         $perPage = (int) $request->query('per_page', '10');
         if ($perPage < 1 || $perPage > 100) {
-            return new QueryValueOutOfRangeHttpException('per_page', 1, 100);
+            throw new QueryValueOutOfRangeHttpException('per_page', 1, 100);
         }
 
         $ports = QueryBuilder::for(Port::query())

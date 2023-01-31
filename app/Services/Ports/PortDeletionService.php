@@ -13,10 +13,10 @@ class PortDeletionService
         protected PortRepositoryInterface $repository
     ) {
     }
-
     /**
-     * @throws InvalidArgumentException
-     * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
+     * Unregisteds the port
+     *
+     *  @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
     public function handle(Port|int $id): ?int
     {
