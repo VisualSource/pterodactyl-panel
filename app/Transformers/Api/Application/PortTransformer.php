@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Pterodactyl\Transformers\Api\Application;
 
@@ -8,11 +8,11 @@ use League\Fractal\Resource\NullResource;
 use Pterodactyl\Services\Acl\Api\AdminAcl;
 use Pterodactyl\Transformers\Api\Transformer;
 
-class PortTransformer extends Transformer 
+class PortTransformer extends Transformer
 {
     /**
-    * List of resources that can be included.
-    */
+     * List of resources that can be included.
+     */
     protected array $availableIncludes = ['allocation'];
 
     /**
@@ -41,11 +41,11 @@ class PortTransformer extends Transformer
             'updated_at' => self::formatTimestamp($model->updated_at),
         ];
     }
-  
+
     /**
-    * Return the allocation associated with this port.
-    */
-    public function includeAllocation(Port $port): Collection|NullResource 
+     * Return the allocation associated with this port.
+     */
+    public function includeAllocation(Port $port): Collection|NullResource
     {
         if (!$this->authorize(AdminAcl::RESOURCE_ALLOCATIONS)) {
             return $this->null();
@@ -53,5 +53,4 @@ class PortTransformer extends Transformer
 
         return $this->collection($port->allocation, new AllocationTransformer());
     }
-
 }

@@ -1,20 +1,17 @@
-<?php 
+<?php
 
 namespace Pterodactyl\Services\Domains;
 
 use Pterodactyl\Models\Domain;
 use Pterodactyl\Contracts\Repository\DomainRepositoryInterface;
 
-
-class DomainUpdateService 
+class DomainUpdateService
 {
-
-     /**
+    /**
      * DomainUpdateService constructor.
      */
     public function __construct(protected DomainRepositoryInterface $repository)
     {
-        
     }
 
     /**
@@ -23,11 +20,10 @@ class DomainUpdateService
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
      */
-    public function handle(Domain|int $id, array $data): Domain {
-
+    public function handle(Domain|int $id, array $data): Domain
+    {
         $id = ($id instanceof Domain) ? $id->id : $id;
 
-        return $this->repository->update($id,$data);
+        return $this->repository->update($id, $data);
     }
-
 }

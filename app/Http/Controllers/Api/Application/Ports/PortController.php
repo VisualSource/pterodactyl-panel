@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * Pterodactyl - Panel
  * Copyright (c) 2022 - 2023 Collin Blosser <cblosser@titanhosting.us>.
@@ -6,6 +7,7 @@
  * This software is licensed under the terms of the MIT license.
  * https://opensource.org/licenses/MIT
  */
+
 namespace Pterodactyl\Http\Controllers\Api\Application\Ports;
 
 use Pterodactyl\Models\Port;
@@ -24,26 +26,26 @@ use Pterodactyl\Http\Requests\Api\Application\Ports\DeletePortRequest;
 use Pterodactyl\Http\Requests\Api\Application\Ports\UpdatePortRequest;
 use Pterodactyl\Http\Controllers\Api\Application\ApplicationApiController;
 
-class PortController extends ApplicationApiController 
+class PortController extends ApplicationApiController
 {
     public function __construct(
         protected PortCreationService $creationService,
         protected PortUpdateService $updateService,
         protected PortDeletionService $deletionService
-    ){
+    ) {
         parent::__construct();
     }
 
     public function index(GetPortsRequest $request): array
     {
-        $perPage = (int) $request->query('per_page','10');
-        if($perPage < 1 || $perPage > 100) {
-            return new QueryValueOutOfRangeHttpException('per_page',1,100);
+        $perPage = (int) $request->query('per_page', '10');
+        if ($perPage < 1 || $perPage > 100) {
+            return new QueryValueOutOfRangeHttpException('per_page', 1, 100);
         }
 
         $ports = QueryBuilder::for(Port::query())
-            ->allowedFilters(['external_port', 'type','method'])
-            ->allowedSorts(['id', 'type', 'external_port','internal_port','internal_address'])
+            ->allowedFilters(['external_port', 'type', 'method'])
+            ->allowedSorts(['id', 'type', 'external_port', 'internal_port', 'internal_address'])
             ->paginate($perPage);
 
         return $this->fractal->collection($ports)
@@ -52,9 +54,9 @@ class PortController extends ApplicationApiController
     }
 
     /**
-    * Return a single port.
-    */
-    public function view(GetPortRequest $request, Port $port): array 
+     * Return a single port.
+     */
+    public function view(GetPortRequest $request, Port $port): array
     {
         return $this->fractal->item($port)
             ->transformWith(PortTransformer::class)
@@ -68,12 +70,12 @@ class PortController extends ApplicationApiController
      * @throws \Pterodactyl\Exceptions\Model\DataValidationException
      */
     public function store(StorePortRequest $request): JsonResponse
-    { 
+    {
         $port = $this->creationService->handle($request->validated());
-       
-        return $this->fractal->item($port) 
+
+        return $this->fractal->item($port)
             ->transformWith(PortTransformer::class)
-            ->respond(201);   
+            ->respond(201);
     }
 
     /**
@@ -84,8 +86,8 @@ class PortController extends ApplicationApiController
      */
     public function update(UpdatePortRequest $request, Port $port): array
     {
-        $port = $this->updateService->handle($port,$request->validated());
-        
+        $port = $this->updateService->handle($port, $request->validated());
+
         return $this->fractal->item($port)
             ->transformWith(PortTransformer::class)
             ->toArray();
@@ -96,7 +98,7 @@ class PortController extends ApplicationApiController
      *
      * @throws \Pterodactyl\Exceptions\Service\Location\HasActiveNodesException
      */
-    public function destroy(DeletePortRequest $request, Port $port): Response 
+    public function destroy(DeletePortRequest $request, Port $port): Response
     {
         $this->deletionService->handle($port->id);
 

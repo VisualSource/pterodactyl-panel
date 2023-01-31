@@ -5,15 +5,15 @@ namespace Pterodactyl\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Pterodactyl\Models\Domain. 
- *  
+ * Pterodactyl\Models\Domain.
+ *
  * @property int $id
  * @property string $domain
  * @property int|null $server_id
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Pterodactyl\Models\Server|null $server
- * 
+ *
  * @method static \Database\Factories\AllocationFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Allocation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Allocation newQuery()
@@ -23,23 +23,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Allocation whereDomain($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Allocation whereServerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Allocation whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  **/
-class Domain extends Model {
+class Domain extends Model
+{
+    public const RESOURCE_NAME = 'domain';
 
-    public const RESOURCE_NAME = "domain";
+    protected $table = 'domains';
 
-    protected $table = "domains";
-
-    protected $guarded = ['id','created_at',"updated_at"];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
-        "server_id" => 'integer'
+        'server_id' => 'integer',
     ];
 
     public static array $validationRules = [
         'server_id' => 'nullable|exists:servers,id',
-        'domain' => 'required|string|unique:domains,domain|between:3,60'
+        'domain' => 'required|string|unique:domains,domain|between:3,60',
     ];
 
     public function getRouteKeyName(): string
@@ -49,11 +50,9 @@ class Domain extends Model {
 
     /**
      * Gets information for the server associated with this domain.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function server(): BelongsTo {
+    public function server(): BelongsTo
+    {
         return $this->belongsTo(Server::class);
     }
-   
 }

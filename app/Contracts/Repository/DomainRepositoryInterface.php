@@ -12,7 +12,8 @@ namespace Pterodactyl\Contracts\Repository;
 use Pterodactyl\Models\Domain;
 use Illuminate\Database\Eloquent\Collection;
 
-interface DomainRepositoryInterface extends RepositoryInterface {
+interface DomainRepositoryInterface extends RepositoryInterface
+{
     /**
      * Return a domain or all domains and the count of the server for that domain.
      *
@@ -20,7 +21,5 @@ interface DomainRepositoryInterface extends RepositoryInterface {
      */
     public function getWithCounts(int $id = null): Collection|Domain;
 
-
     public function getWithServers(int $id = null): Collection|Domain;
 }
-?>

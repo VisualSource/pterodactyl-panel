@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use Pterodactyl\Facades\Activity;
 use Pterodactyl\Events\User\EmailChange;
 use Pterodactyl\Services\Users\UserUpdateService;
@@ -45,7 +44,7 @@ class AccountController extends ClientApiController
             Activity::event('user:account.email-changed')
                 ->property(['old' => $original, 'new' => $request->input('email')])
                 ->log();
-            EmailChange::dispatch($request->input("email"), $user->uuid);
+            EmailChange::dispatch($request->input('email'), $user->uuid);
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);

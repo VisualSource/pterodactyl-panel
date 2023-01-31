@@ -212,7 +212,7 @@ Route::group(['prefix' => '/users'], function () {
 
     Route::delete('/{user:id}', [Application\Users\UserController::class, 'delete']);
 
-    Route::post("/external/login",[Application\Users\ExternalLoginController::class,"index"]);
+    Route::post('/external/login', [Application\Users\ExternalLoginController::class, 'index']);
 });
 
 /*
@@ -225,11 +225,11 @@ Route::group(['prefix' => '/users'], function () {
 */
 Route::group(['prefix' => '/domains'], function () {
     Route::get('/', [Application\Domains\DomainController::class, 'index']);
-    Route::get("/{domain:id}",[Application\Domains\DomainController::class, 'view']);
-    
+    Route::get('/{domain:id}', [Application\Domains\DomainController::class, 'view']);
+
     Route::post('/', [Application\Domains\DomainController::class, 'store']);
 
-    Route::patch('/{domain:id}',[Application\Domains\DomainController::class,'update']);
+    Route::patch('/{domain:id}', [Application\Domains\DomainController::class, 'update']);
 
     Route::delete('/{domain:id}', [Application\Domains\DomainController::class, 'destroy']);
 });
@@ -248,7 +248,7 @@ Route::group(['prefix' => '/ports'], function () {
 
     Route::post('/', [Application\Ports\PortController::class, 'store']);
 
-    Route::patch('/{port:id}',[Application\Ports\PortController::class,'update']);
+    Route::patch('/{port:id}', [Application\Ports\PortController::class, 'update']);
 
     Route::delete('/{port:id}', [Application\Ports\PortController::class, 'destroy']);
 });

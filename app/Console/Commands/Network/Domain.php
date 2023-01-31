@@ -2,12 +2,12 @@
 
 namespace Pterodactyl\Console\Commands\Network;
 
-use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Validation\Factory as ValidatorFactory;
 
 class Domain extends Command implements Isolatable
-{ 
+{
     /**
      * The name and signature of the console command.
      *
@@ -34,32 +34,35 @@ class Domain extends Command implements Isolatable
 
     /**
      * Execute the console command.
-     * 
-     * @throws \Illuminate\Validation\ValidationException
+     *
      * @return int
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function handle()
     {
-        $register = $this->option("register") ? "create" : null;
-        $unregister = $this->option("unregister") ? "remove" : null;
-        $sub_domain = $this->argument("name");
+        $register = $this->option('register') ? 'create' : null;
+        $unregister = $this->option('unregister') ? 'remove' : null;
+        $sub_domain = $this->argument('name');
 
-        if($register && $unregister) {
-            $this->output->error("Can not use --register and --unregister at the same time.");
+        if ($register && $unregister) {
+            $this->output->error('Can not use --register and --unregister at the same time.');
+
             return Command::INVALID;
         }
-        if(is_null($register) && is_null($unregister)) {
-            $this->output->error("Select --register or --unregister.");
+        if (is_null($register) && is_null($unregister)) {
+            $this->output->error('Select --register or --unregister.');
+
             return Command::INVALID;
         }
-        
+
         $validator = $this->validator->make([
             'sub_domain' => $sub_domain,
-        ],[
-            'sub_domain' => 'string|required|between:3,60'
+        ], [
+            'sub_domain' => 'string|required|between:3,60',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             foreach ($validator->getMessageBag()->all() as $message) {
                 $this->output->error($message);
             }
@@ -70,27 +73,29 @@ class Domain extends Command implements Isolatable
         $action = $register ? $register : $unregister;
 
         try {
-            $output= array();
-            $retval=null;
+            $output = [];
+            $retval = null;
 
-            $app = base_path("external_application/domain/dist/index.js");
+            $app = base_path('external_application/domain/dist/index.js');
 
-            $cmd = "node " . $app . " " . $action . " " . escapeshellarg($sub_domain);
+            $cmd = 'node ' . $app . ' ' . $action . ' ' . escapeshellarg($sub_domain);
 
-            exec($cmd,$output,$retval);
+            exec($cmd, $output, $retval);
 
-            foreach($output as $msg) {
+            foreach ($output as $msg) {
                 $this->info($msg);
             }
-            
-            if($retval != 0) {
-                $this->output->error("Failed to proform action.");
+
+            if ($retval != 0) {
+                $this->output->error('Failed to proform action.');
+
                 return Command::FAILURE;
             }
 
             return Command::SUCCESS;
         } catch (\Throwable $th) {
             $this->output->error($th->getMessage());
+
             return Command::FAILURE;
         }
     }

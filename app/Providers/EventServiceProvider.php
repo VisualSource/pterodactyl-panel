@@ -7,16 +7,15 @@ use Pterodactyl\Models\Server;
 use Pterodactyl\Models\Subuser;
 use Pterodactyl\Models\EggVariable;
 use Pterodactyl\Observers\UserObserver;
+use Pterodactyl\Events\User\EmailChange;
 use Pterodactyl\Observers\ServerObserver;
 use Pterodactyl\Observers\SubuserObserver;
+use Pterodactyl\Listeners\EmailChangeWebhook;
 use Pterodactyl\Observers\EggVariableObserver;
 use Pterodactyl\Listeners\Auth\AuthenticationListener;
 use Pterodactyl\Events\Server\Installed as ServerInstalledEvent;
 use Pterodactyl\Notifications\ServerInstalled as ServerInstalledNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-
-use Pterodactyl\Events\User\EmailChange;
-use Pterodactyl\Listeners\EmailChangeWebhook;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -26,8 +25,8 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         ServerInstalledEvent::class => [ServerInstalledNotification::class],
         EmailChange::class => [
-            EmailChangeWebhook::class
-        ]
+            EmailChangeWebhook::class,
+        ],
     ];
 
     protected $subscribe = [

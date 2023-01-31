@@ -1,32 +1,31 @@
-<?php 
+<?php
 
 namespace Pterodactyl\Transformers\Api\Application;
 
 use Pterodactyl\Models\Domain;
-use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Resource\NullResource;
 use Pterodactyl\Services\Acl\Api\AdminAcl;
 use Pterodactyl\Transformers\Api\Transformer;
 
-class DomainTransformer extends Transformer 
+class DomainTransformer extends Transformer
 {
     /**
-    * List of resources that can be included.
-    */
+     * List of resources that can be included.
+     */
     protected array $availableIncludes = ['server'];
 
     /**
      * Return the resource name for the JSONAPI output.
-    */
+     */
     public function getResourceName(): string
     {
         return Domain::RESOURCE_NAME;
     }
 
     /**
-    * Return a generic transformed location array.
-    */
+     * Return a generic transformed location array.
+     */
     public function transform(Domain $model): array
     {
         return [
@@ -41,19 +40,18 @@ class DomainTransformer extends Transformer
     /**
      * Return the server associated with this domain.
      */
-    public function includeServer(Domain $domain): Item|NullResource 
+    public function includeServer(Domain $domain): Item|NullResource
     {
-        if(!$this->authorize((AdminAcl::RESOURCE_SERVERS))) {
+        if (!$this->authorize(AdminAcl::RESOURCE_SERVERS)) {
             return $this->null();
         }
 
         $server = $domain->server;
 
-        if(is_null($server)) {
+        if (is_null($server)) {
             return $this->null();
         }
 
-        return $this->item($server,new ServerTransformer());
+        return $this->item($server, new ServerTransformer());
     }
-
 }

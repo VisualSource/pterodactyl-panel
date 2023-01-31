@@ -3,19 +3,18 @@
 namespace Pterodactyl\Http\Controllers\Api\Application\Users;
 
 use Illuminate\Http\Request;
+use Pterodactyl\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Pterodactyl\Facades\Activity;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Event;
-use Pterodactyl\Models\User;
-use Pterodactyl\Facades\Activity;
 use Pterodactyl\Http\Controllers\Controller;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Pterodactyl\Http\Requests\Api\Application\Users\FetchUserRequest;
 
-class ExternalLoginController extends Controller 
+class ExternalLoginController extends Controller
 {
- 
     /**
      * Determine if the user is logging in using an email or username.
      */
@@ -25,16 +24,16 @@ class ExternalLoginController extends Controller
     }
 
     /**
-    * Fire a failed login event.
-    */
+     * Fire a failed login event.
+     */
     protected function fireFailedLoginEvent(Authenticatable $user = null, array $credentials = [])
     {
         Event::dispatch(new Failed('auth', $user, $credentials));
     }
 
     /**
-    * Get the failed login response instance.
-    */
+     * Get the failed login response instance.
+     */
     protected function sendFailedLoginResponse(Request $request, Authenticatable $user = null, string $message = null)
     {
         $this->fireFailedLoginEvent($user, [
@@ -42,15 +41,16 @@ class ExternalLoginController extends Controller
         ]);
 
         return new JsonResponse([
-            'message' => trans('auth.failed')
-        ],401);
+            'message' => trans('auth.failed'),
+        ], 401);
     }
-    public function index(FetchUserRequest $request): JsonResponse {
 
+    public function index(FetchUserRequest $request): JsonResponse
+    {
         try {
             $username = $request->input('username');
 
-             /** @var \Pterodactyl\Models\User $user*/ 
+            /** @var \Pterodactyl\Models\User $user */
             $user = User::query()->where($this->getField($username), $username)->firstOrFail();
         } catch (ModelNotFoundException) {
             return $this->sendFailedLoginResponse($request);
@@ -68,11 +68,11 @@ class ExternalLoginController extends Controller
 
         $data = $user->toVueObject();
 
-        $data["totp_secret"] = $user->totp_secret;
+        $data['totp_secret'] = $user->totp_secret;
 
         return new JsonResponse([
-            "object" => "user",
-            "attributes" => $data
+            'object' => 'user',
+            'attributes' => $data,
         ]);
     }
 }

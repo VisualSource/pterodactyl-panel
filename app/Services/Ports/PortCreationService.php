@@ -1,51 +1,47 @@
-<?php 
+<?php
 
 namespace Pterodactyl\Services\Ports;
 
-use Illuminate\Support\Facades\Artisan;
 use Pterodactyl\Models\Port;
+use Illuminate\Support\Facades\Artisan;
 use Pterodactyl\Contracts\Repository\PortRepositoryInterface;
 
-class PortCreationService 
+class PortCreationService
 {
-    public function __construct(protected PortRepositoryInterface $repository) 
+    public function __construct(protected PortRepositoryInterface $repository)
     {
-        
     }
 
     /**
-    * Create a new domain.
-    *
-    * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-    */
-    public function handle(array $data): Port 
+     * Create a new domain.
+     *
+     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
+     */
+    public function handle(array $data): Port
     {
-
-        /**@var Port $port */
+        /** @var Port $port */
         $port = $this->repository->create($data);
 
-        if(!env("TH_NETWORK_DRYRUN",false)) { 
-
+        if (!env('TH_NETWORK_DRYRUN', false)) {
             $args = [
-                'action' => "open",
+                'action' => 'open',
                 'port' => $port->external_port,
-                "-d" => $port->description,
+                '-d' => $port->description,
                 '-t' => $port->type,
-                '-m' => $port->method
+                '-m' => $port->method,
             ];
 
-            if(!is_null($port->internal_port)) {
-                $args["internal"] = $port->internal_port;
+            if (!is_null($port->internal_port)) {
+                $args['internal'] = $port->internal_port;
             }
 
-            if(!is_null($port->internal_address)) {
-                $args["--i"] = $port->internal_address;
+            if (!is_null($port->internal_address)) {
+                $args['--i'] = $port->internal_address;
             }
 
-            Artisan::queue("network:port",$args);
-
+            Artisan::queue('network:port', $args);
         }
-        
+
         return $port;
     }
 }

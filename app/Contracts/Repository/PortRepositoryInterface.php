@@ -12,8 +12,9 @@ namespace Pterodactyl\Contracts\Repository;
 use Pterodactyl\Models\Port;
 use Illuminate\Database\Eloquent\Collection;
 
-interface PortRepositoryInterface extends RepositoryInterface {
-     /**
+interface PortRepositoryInterface extends RepositoryInterface
+{
+    /**
      * Return a port or all ports along with their allocation.
      *
      * @throws \Pterodactyl\Exceptions\Repository\RecordNotFoundException
