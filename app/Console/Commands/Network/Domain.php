@@ -70,7 +70,7 @@ class Domain extends Command implements Isolatable
         $action = $register ? $register : $unregister;
 
         try {
-            $output=null;
+            $output= array();
             $retval=null;
 
             $app = base_path("external_application/domain/dist/index.js");
@@ -79,12 +79,10 @@ class Domain extends Command implements Isolatable
 
             exec($cmd,$output,$retval);
 
-            if(!is_null($output)) {
-                foreach($output as $msg) {
-                    $this->info($msg);
-                }
+            foreach($output as $msg) {
+                $this->info($msg);
             }
-
+            
             if($retval != 0) {
                 $this->output->error("Failed to proform action.");
                 return Command::FAILURE;
